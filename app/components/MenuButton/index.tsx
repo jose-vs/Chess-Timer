@@ -5,8 +5,8 @@ interface MenuButtonProps {
   name: string;
   icon: any;
   color: {
-    primary: string;
-    secondary: string;
+    buttonPrimary: string;
+    buttonSecondary: string;
   };
   onPress: () => void;
 }
@@ -18,13 +18,12 @@ export const MenuButton = (props: MenuButtonProps) => {
       size={"lg"}
       variant="solid"
       borderRadius={"full"}
-      // backgroundColor={color.primary}
-      bg={color.primary}
+      bg={color.buttonPrimary}
       _pressed={{
         bg: "black", //temp
       }}
       _icon={{
-        color: color.secondary,
+        color: color.buttonSecondary,
         as: icon,
         name: name,
       }}

@@ -3,12 +3,16 @@ import { HStack, Center, VStack, Box } from "native-base";
 import { MenuButton } from "../../components";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import type { RootState } from "../../models/root-stores/root-store";
+import { useSelector, useDispatch } from 'react-redux'
+import { changeTheme } from "../../models/app-slice/themeSlice";
 import { AppPallette } from "../../theme";
 import { Timer } from "./components/Timer";
 
 
 export const HomeScreen = () => {
-  const [theme, setTheme] = useState(AppPallette.default);
+  const theme = useSelector((state: RootState) => state.theme)
+  const dispatch = useDispatch()
 
   return (
     <Center backgroundColor={theme.secondary} px={4} flex={1}>
@@ -24,17 +28,19 @@ export const HomeScreen = () => {
         <MenuButton
           name="settings"
           icon={Ionicons}
-          color={{ primary: "primary.600", secondary: "secondary.100" }}
+          color={theme}
           onPress={() => {
-            console.log("hi");
+            dispatch(changeTheme(AppPallette.theme2));
           }}
         />
         {/* PAUSE/RESUME */}
         <MenuButton
           name="pause"
           icon={MaterialIcons}
-          color={{ primary: "primary.600", secondary: "secondary.100" }}
-          onPress={() => {}}
+          color={theme}
+          onPress={() => {
+            dispatch(changeTheme(AppPallette.default));
+          }}
         />
       </HStack>
     </Center>

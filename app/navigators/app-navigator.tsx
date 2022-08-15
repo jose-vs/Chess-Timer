@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  NavigationContainer,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { HomeScreen, SettingsScreen, ThemeScreen } from "../screens";
 
@@ -22,8 +20,24 @@ const AppStack = () => {
       initialRouteName="home"
     >
       <Stack.Screen name="home" component={HomeScreen} />
-      <Stack.Screen name="settings" component={SettingsScreen} />
-      <Stack.Screen name="theme" component={ThemeScreen} />
+      <Stack.Screen
+        name="settings"
+        component={SettingsScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Settings",
+          headerBackTitleVisible: true,
+        }}
+      />
+      <Stack.Screen
+        name="theme"
+        component={ThemeScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Theme",
+          headerBackTitleVisible: true,
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -36,3 +50,7 @@ export const AppNavigator = () => {
   );
 };
 
+AppNavigator.displayName = "AppNavigator";
+
+const exitRoutes = ["welcome"];
+export const canExit = (routeName: string) => exitRoutes.includes(routeName);

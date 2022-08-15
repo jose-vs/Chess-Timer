@@ -1,9 +1,9 @@
-import React from 'react';
-import 'react-native-gesture-handler';
-import {
-  NativeBaseProvider,
-} from "native-base";
-import { AppNavigator } from './navigators';
+import React from "react";
+import "react-native-gesture-handler";
+import { NativeBaseProvider } from "native-base";
+import { AppNavigator } from "./navigators";
+import { store } from "./models/root-stores/root-store";
+import { Provider as StoreProvider } from "react-redux";
 
 // const theme = extendTheme({colors: AppTheme})
 
@@ -16,7 +16,9 @@ import { AppNavigator } from './navigators';
 export default function App() {
   return (
     <NativeBaseProvider>
-       <AppNavigator/>
+      <StoreProvider store={store}>
+        <AppNavigator />
+      </StoreProvider>
     </NativeBaseProvider>
   );
 }
