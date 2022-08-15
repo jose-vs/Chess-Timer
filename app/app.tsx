@@ -1,23 +1,23 @@
 import React from 'react';
 import {
   NativeBaseProvider,
-  extendTheme,
+  // extendTheme,
 } from "native-base";
-import { AppTheme } from './theme';
+// import { AppTheme } from './theme';
 import { HomeScreen } from './screens';
-import { AppNavigator } from './navigators';
+// import { AppNavigator } from './navigators';
 
-const theme = extendTheme({colors: AppTheme})
+// const theme = extendTheme({colors: AppTheme})
 
-type CustomThemeType = typeof theme;
+// type CustomThemeType = typeof theme;
 
-declare module 'native-base' {
-  interface ICustomTheme extends CustomThemeType {}
-}
+// declare module 'native-base' {
+//   interface ICustomTheme extends CustomThemeType {}
+// }
 
 export default function App() {
   return (
-    <NativeBaseProvider theme={theme}>
+    <NativeBaseProvider>
        <HomeScreen/>
     </NativeBaseProvider>
   );
