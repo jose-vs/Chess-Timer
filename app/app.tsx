@@ -1,11 +1,9 @@
 import React from 'react';
+import 'react-native-gesture-handler';
 import {
   NativeBaseProvider,
-  // extendTheme,
 } from "native-base";
-// import { AppTheme } from './theme';
-import { HomeScreen } from './screens';
-// import { AppNavigator } from './navigators';
+import { AppNavigator } from './navigators';
 
 // const theme = extendTheme({colors: AppTheme})
 
@@ -18,7 +16,7 @@ import { HomeScreen } from './screens';
 export default function App() {
   return (
     <NativeBaseProvider>
-       <HomeScreen/>
+       <AppNavigator/>
     </NativeBaseProvider>
   );
 }
