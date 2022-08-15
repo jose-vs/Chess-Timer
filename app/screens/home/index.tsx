@@ -1,6 +1,6 @@
 import React from "react";
 import { HStack, Center, VStack, Box } from "native-base";
-import { MenuButton } from "../../components";
+import { Button } from "../../components";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -27,15 +27,21 @@ export const HomeScreen: React.FC = () => {
       {/* MENU */}
       <HStack space={"lg"} alignItems="center" position="absolute">
         {/* SETTINGS */}
-        <MenuButton
+        <Button
           name="settings"
           icon={Ionicons}
+          isRound={true}
           onPress={() => {
             navigation.navigate("settings");
           }}
         />
         {/* PAUSE/RESUME */}
-        <MenuButton name="pause" icon={MaterialIcons} onPress={() => {}} />
+        <Button
+          name="pause"
+          icon={MaterialIcons}
+          isRound={true}
+          onPress={() => {}}
+        />
       </HStack>
     </Center>
   );

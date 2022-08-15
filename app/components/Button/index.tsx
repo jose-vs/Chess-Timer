@@ -1,24 +1,24 @@
-import { useNavigation } from "@react-navigation/native";
-import { Button, Box, IconButton, Icon } from "native-base";
+import { IconButton } from "native-base";
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../models/root-stores/root-store";
 
-interface MenuButtonProps {
+interface ButtonProps {
   name: string;
   icon: any;
+  isRound?: boolean
   onPress: () => void
 }
 
-export const MenuButton = (props: MenuButtonProps) => {
-  const { name, icon, onPress } = props;
+export const Button = (props: ButtonProps) => {
+  const { name, icon, isRound, onPress } = props;
   const theme = useSelector((state: RootState) => state.theme);
-  const navigation = useNavigation();
+
   return (
     <IconButton
       size={"lg"}
       variant="solid"
-      borderRadius={"full"}
+      borderRadius={isRound ? "full" : "lg"}
       bg={theme.buttonPrimary}
       _pressed={{
         bg: "black", //temp

@@ -1,2 +1,2 @@
 export * from './ToggleDarkMode'
-export * from './MenuButton'
+export * from './Button'
