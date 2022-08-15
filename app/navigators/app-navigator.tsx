@@ -1,5 +1,5 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { HomeScreen, SettingsScreen, ThemeScreen } from "../screens";
 
@@ -19,7 +19,13 @@ const AppStack = () => {
       }}
       initialRouteName="home"
     >
-      <Stack.Screen name="home" component={HomeScreen} />
+      <Stack.Screen
+        name="home"
+        component={HomeScreen}
+        options={{
+          headerTitle: "Back",
+        }}
+      />
       <Stack.Screen
         name="settings"
         component={SettingsScreen}
