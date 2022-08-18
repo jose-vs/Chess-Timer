@@ -21,7 +21,7 @@ export const Button = (props: ButtonProps) => {
       borderRadius={isRound ? "full" : "lg"}
       bg={theme.buttonPrimary}
       _pressed={{
-        bg: "black", //temp
+        bg: theme.pressed, 
       }}
       _icon={{
         color: theme.buttonSecondary,
