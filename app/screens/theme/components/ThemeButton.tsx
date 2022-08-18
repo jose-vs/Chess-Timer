@@ -1,16 +1,33 @@
-import { Circle, Center, Button, HStack } from "native-base";
+import { Box, Pressable } from "native-base";
 import React from "react";
 import { ThemeState } from "../../../models/app-slice/themeSlice";
 
 interface ThemeButtonProps {
   theme: ThemeState;
+  changeTheme: (theme: ThemeState) => void
 }
 
-export const ThemeButton = ({ theme }: ThemeButtonProps) => {
-  const { primary, secondary } = theme;
+export const ThemeButton = ({ theme, changeTheme }: ThemeButtonProps) => {
   return (
-    <Button size="lg" variant="outline" rounded={"full"} >
-      
-    </Button>
+    <Box alignItems="center" m={3}>
+      <Pressable onPress={() => changeTheme(theme)}>
+        <Box
+          borderColor={"coolGray.200"}
+          borderWidth={4}
+          rounded={"full"}
+          shadow={3}
+        >
+          <Box
+            h={15}
+            w={15}
+            rounded="full"
+            borderTopColor={theme.primary}
+            borderTopWidth={60}
+            borderRightColor={theme.secondary}
+            borderRightWidth={60}
+          ></Box>
+        </Box>
+      </Pressable>
+    </Box>
   );
 };

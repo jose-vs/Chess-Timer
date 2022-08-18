@@ -10,8 +10,7 @@ interface TimerProps {
   isActive: boolean;
 }
 
-export const Timer = (props: TimerProps) => {
-  const { color, isActive } = props;
+export const Timer = ({ color, isActive }: TimerProps) => {
   return (
     <Center
       bg={isActive ? color.primary : color.secondary}
