@@ -1,10 +1,10 @@
-import { Center, Box, Pressable } from "native-base";
-import React, { useState, useEffect, MenuHTMLAttributes } from "react";
-import { toMMSS } from "../../../utils/toMMSS";
+import { Box, Pressable } from "native-base";
+import React from "react";
 import { WINDOW_WIDTH } from "../../../utils";
-import { TimerState } from "../../../models/app-slice/timeSlice";
+import { TimerType } from "../../../models/timer";
 
 interface TimerProps {
+  name: TimerType
   color: {
     primary: string;
     secondary: string;
@@ -12,10 +12,11 @@ interface TimerProps {
   isActive: boolean;
   isTop?: boolean;
   time: string;
-  handlePress: (key: keyof TimerState) => void;
+  handlePress: (timer: TimerType) => void;
 }
 
 export const Timer = ({
+  name, 
   color,
   isActive,
   isTop,
@@ -34,7 +35,7 @@ export const Timer = ({
         
       }}
       onPress={() => {
-        handlePress(isTop ? "timerBot" : "timerTop");
+        handlePress(name);
       }}
     >
       <Box
