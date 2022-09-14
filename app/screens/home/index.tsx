@@ -1,20 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { HStack, Center, VStack } from "native-base";
 import { Button } from "../../components";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { RootState } from "../../models/root-stores/root-store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Timer } from "./components/Timer";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParamList } from "../../navigators";
-import {
-  ITimerInterface,
-  TimerType,
-  DEFAULT_TIMER,
-  ITimer,
-} from "../../models/timer";
+import { TimerType, ITimer } from "../../models/timer";
 import { toMMSS } from "../../utils/toMMSS";
+import { changeStatus } from "../../models/app-slice/modeSlice";
 
 type HomeScreenProps = StackNavigationProp<StackNavigatorParamList, "home">;
 
@@ -24,28 +20,26 @@ export const HomeScreen: React.FC = () => {
   /**
    *
    */
+  const dispatch = useDispatch();
   const navigation = useNavigation<HomeScreenProps>();
   const theme = useSelector((state: RootState) => state.theme);
+  const timerInterface = useSelector((state: RootState) => state.mode);
 
   /**
    *
    */
-  const [timerInterface, setTimerInterface] =
-    useState<ITimerInterface>(DEFAULT_TIMER);
+  const [_interval, _setInterval] = useState<NodeJS.Timeout>();
 
-  /**
-   *
-   */
   const [topTimer, setTopTimer] = useState<ITimer>({
     name: "top",
     isActive: false,
-    remainingTime: DEFAULT_TIMER.startTime,
+    remainingTime: timerInterface.startTime,
   } as ITimer);
 
   const [botTimer, setBotTimer] = useState<ITimer>({
     name: "bot",
     isActive: false,
-    remainingTime: DEFAULT_TIMER.startTime,
+    remainingTime: timerInterface.startTime,
   } as ITimer);
 
   /**
@@ -53,16 +47,19 @@ export const HomeScreen: React.FC = () => {
    */
   useEffect(() => {
     const _tick = (): void => {
-      if (topTimer.isActive && !botTimer.isActive) {
-        _handleTopTick();
-      }
-      if (botTimer.isActive && !topTimer.isActive) {
-        _handleBotTick();
+      if (topTimer.remainingTime > 0 && botTimer.remainingTime > 0) {
+        if (topTimer.isActive && !botTimer.isActive) {
+          _handleTopTick();
+        } else if (botTimer.isActive && !topTimer.isActive) {
+          _handleBotTick();
+        }
+      } else {
+        clearInterval(_interval);
       }
     };
 
     if (timerInterface.status === "live") {
-      const _interval = setInterval(() => _tick(), UPDATE_DELAY);
+      _setInterval(setInterval(() => _tick(), UPDATE_DELAY));
       return () => clearInterval(_interval);
     }
   }, [topTimer, botTimer, timerInterface.status]);
@@ -96,7 +93,7 @@ export const HomeScreen: React.FC = () => {
    *
    */
   const pause = (): void => {
-    setTimerInterface({ ...timerInterface, status: "ready" });
+    dispatch(changeStatus("ready"));
   };
 
   /**
@@ -104,7 +101,7 @@ export const HomeScreen: React.FC = () => {
    */
   const start = (timer: TimerType): void => {
     if (timerInterface.status !== "ready") return;
-    setTimerInterface({ ...timerInterface, status: "live" });
+    dispatch(changeStatus("live"));
 
     switch (timer) {
       case "top":

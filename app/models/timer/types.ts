@@ -4,6 +4,7 @@ export type TimerStatus = 'ready' | 'live'
 
 export interface ITimerInterface { 
     name: string
+    key: string
     status: TimerStatus
     increment: number
     startTime: number 
