@@ -27,18 +27,22 @@ export const SettingsScreen: React.FC = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        await AsyncStorage.getAllKeys().then((modes_keys) => {
-          console.log(modes_keys);
-          modes_keys.map(async (key) => {
-            await AsyncStorage.getItem(key).then((_mode) => {
-              _mode != null
-                ? setModes((prev) => {
-                    return [...prev, JSON.parse(_mode) as ITimerInterface];
-                  })
-                : null;
-            });
+        await AsyncStorage.getAllKeys()
+          .then((modes_keys) => {
+            return Promise.all(
+              modes_keys.map(async (key) => {
+                const _mode = await AsyncStorage.getItem(key);
+                return _mode != null ? _mode : null;
+              })
+            );
+          })
+          .then((mode) => {
+            setModes(
+              mode.map((_mode) => {
+                if (_mode) return JSON.parse(_mode);
+              })
+            );
           });
-        });
       } catch (e) {
         // error reading value
       }
