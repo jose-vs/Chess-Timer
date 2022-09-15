@@ -8,11 +8,12 @@ import { RootState } from "../../models/root-stores/root-store";
 import { StackNavigatorParamList } from "../../navigators";
 import { Entypo, Ionicons, Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 // import AppLoading from "expo-app-loading";
 import { DEFAULT_TIMER, ITimerInterface } from "../../models/timer";
 import { Mode } from "./components/Mode";
 
-type SettingsScreenProps = StackNavigationProp<
+export type SettingsScreenProps = StackNavigationProp<
   StackNavigatorParamList,
   "settings"
 >;

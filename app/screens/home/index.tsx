@@ -62,7 +62,7 @@ export const HomeScreen: React.FC = () => {
       _setInterval(setInterval(() => _tick(), UPDATE_DELAY));
       return () => clearInterval(_interval);
     }
-  }, [topTimer, botTimer, timerInterface.status]);
+  }, [topTimer, botTimer]);
 
   /**
    *
@@ -87,7 +87,8 @@ export const HomeScreen: React.FC = () => {
   /**
    *
    */
-  const reset = (): void => {};
+  const reset = (): void => {
+  };
 
   /**
    *
