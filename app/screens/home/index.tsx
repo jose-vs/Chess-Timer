@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { HStack, Center, VStack } from "native-base";
 import { Button } from "../../components";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { RootState } from "../../models/root-stores/root-store";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,7 +45,7 @@ export const HomeScreen: React.FC = () => {
   const [timer, setTimer] = useState<TimerState>(initialState);
 
   /**
-   * 
+   *
    */
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -56,10 +56,10 @@ export const HomeScreen: React.FC = () => {
   }, [navigation, timerInterface]);
 
   /**
-   * 
+   *
    */
   useEffect(() => {
-    if (timerInterface.status === "ready") dispatch(changeStatus("live"));
+    console.log(timerInterface.status);
 
     const _tick = () => {
       if (timerInterface.status === "live") {
@@ -78,15 +78,26 @@ export const HomeScreen: React.FC = () => {
   }, [timer]);
 
   /**
-   * 
-   * @param timerKey 
+   *
+   * @param timerKey
    */
   const onTimerPress = (timerKey: keyof TimerState) => {
     // if both are inactive
-    if (!timer.top.isActive && !timer.bot.isActive) {
+    if (
+      !timer.top.isActive &&
+      !timer.bot.isActive &&
+      timerInterface.status === "ready"
+    ) {
+      dispatch(changeStatus("live"));
       _changeState(timerKey);
 
       // if only one is inactive
+    } else if (
+      !timer[timerKey].isActive &&
+      timerInterface.status === "paused"
+    ) {
+      dispatch(changeStatus("live"));
+      _switchState(timerKey);
     } else if (!timer[timerKey].isActive) {
       _switchState(timerKey);
     }
@@ -96,13 +107,20 @@ export const HomeScreen: React.FC = () => {
     }
   };
 
-  const pause = () => { 
+  const pause = () => {
+    if (timerInterface.status !== "ready") dispatch(changeStatus("paused"));
+  };
 
-  }
+  const reset = () => {
+    if (timerInterface.status === "paused") {
+      setTimer(initialState);
+      dispatch(changeStatus("ready"));
+    }
+  };
 
   /**
-   * 
-   * @param timerKey 
+   *
+   * @param timerKey
    */
   const _changeState = (timerKey: keyof TimerState) => {
     setTimer({
@@ -112,8 +130,8 @@ export const HomeScreen: React.FC = () => {
   };
 
   /**
-   * 
-   * @param timerKey 
+   *
+   * @param timerKey
    */
   const _switchState = (timerKey: keyof TimerState) => {
     //
@@ -145,8 +163,8 @@ export const HomeScreen: React.FC = () => {
   };
 
   /**
-   * 
-   * @param timerKey 
+   *
+   * @param timerKey
    */
   const _decrement = (timerKey: keyof TimerState) => {
     if (timer[timerKey].isActive && timer[timerKey].time > 0) {
@@ -154,6 +172,10 @@ export const HomeScreen: React.FC = () => {
         ...timer,
         [timerKey]: { ...timer[timerKey], time: timer[timerKey].time - 1 },
       });
+    }
+
+    if (timer.top.time > 0 || timer.bot.time > 0) {
+      // console.log("bruh")
     }
   };
 
@@ -176,13 +198,22 @@ export const HomeScreen: React.FC = () => {
             navigation.navigate("settings");
           }}
         />
-        {/* PAUSE/RESUME */}
-        <Button
-          name="pause"
-          icon={MaterialIcons}
-          isRound={true}
-          onPress={() => {}}
-        />
+        {/* PAUSE/RESET */}
+        {timerInterface.status !== "paused" ? (
+          <Button
+            name="pause"
+            icon={MaterialIcons}
+            isRound={true}
+            onPress={pause}
+          />
+        ) : (
+          <Button
+            name="redo-alt"
+            icon={FontAwesome5}
+            isRound={true}
+            onPress={reset}
+          />
+        )}
       </HStack>
     </Center>
   );
