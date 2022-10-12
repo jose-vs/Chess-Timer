@@ -11,7 +11,7 @@ interface ModeProps {
   timer: ITimerInterface;
 }
 
-export const Mode = ({ timer}: ModeProps) => {
+export const Mode = ({timer}: ModeProps) => {
   const dispatch = useDispatch()
   const navigation = useNavigation<SettingsScreenProps>();
 

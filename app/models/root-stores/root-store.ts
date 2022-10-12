@@ -6,7 +6,7 @@ import modeReducer from '../app-slice/modeSlice'
 export const store = configureStore({
   reducer: {
     theme: themeReducer,
-    mode: modeReducer
+    mode: modeReducer,
   },
 })
 

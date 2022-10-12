@@ -1,31 +1,25 @@
 import { Box, Pressable } from "native-base";
 import React from "react";
 import { WINDOW_WIDTH } from "../../../utils";
-import { TimerType } from "../../../models/timer";
+import { ITimer, TimerState} from "../../../models/timer";
 
 interface TimerProps {
-  name: TimerType
+  timer: ITimer
   color: {
     primary: string;
     secondary: string;
   };
-  isActive: boolean;
-  isTop?: boolean;
-  time: string;
-  handlePress: (timer: TimerType) => void;
+  handlePress: (timerKey: keyof TimerState) => void;
 }
 
 export const Timer = ({
-  name, 
+  timer, 
   color,
-  isActive,
-  isTop,
-  time,
   handlePress,
 }: TimerProps) => {
   return (
     <Pressable
-      bg={isActive ? color.primary : color.secondary}
+      bg={timer.isActive ? color.primary : color.secondary}
       borderRadius="3xl"
       style={{
         flex: 1,
@@ -35,17 +29,17 @@ export const Timer = ({
         
       }}
       onPress={() => {
-        handlePress(name);
+        handlePress(timer.name);
       }}
     >
       <Box
         style={
-          isTop
+          timer.name === "top"
             ? { transform: [{ rotateX: "180deg" }, { rotateY: "180deg" }] }
             : {}
         }
       >
-        {time}
+        {timer.time}
       </Box>
     </Pressable>
   );

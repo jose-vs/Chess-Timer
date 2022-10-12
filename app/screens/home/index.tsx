@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { HStack, Center, VStack } from "native-base";
 import { Button } from "../../components";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -8,8 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Timer } from "./components/Timer";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParamList } from "../../navigators";
-import { TimerType, ITimer } from "../../models/timer";
-import { toMMSS } from "../../utils/toMMSS";
+import { ITimer, TimerState } from "../../models/timer";
 import { changeStatus } from "../../models/app-slice/modeSlice";
 
 type HomeScreenProps = StackNavigationProp<StackNavigatorParamList, "home">;
@@ -22,144 +21,139 @@ export const HomeScreen: React.FC = () => {
    */
   const dispatch = useDispatch();
   const navigation = useNavigation<HomeScreenProps>();
+
+  //
   const theme = useSelector((state: RootState) => state.theme);
   const timerInterface = useSelector((state: RootState) => state.mode);
 
+  const initialState: TimerState = {
+    top: {
+      name: "top",
+      isActive: false,
+      time: timerInterface.startTime,
+    },
+    bot: {
+      name: "bot",
+      isActive: false,
+      time: timerInterface.startTime,
+    },
+  };
+
+  //
+  const [isLoaded, setLoaded] = useState<boolean>(false);
+  const [timerID, setTimerID] = useState<NodeJS.Timeout>();
+  const [timer, setTimer] = useState<TimerState>(initialState);
+
   /**
-   *
-   */
-  const [_interval, _setInterval] = useState<NodeJS.Timeout>();
-
-  const [topTimer, setTopTimer] = useState<ITimer>({
-    name: "top",
-    isActive: false,
-    remainingTime: timerInterface.startTime,
-  } as ITimer);
-
-  const [botTimer, setBotTimer] = useState<ITimer>({
-    name: "bot",
-    isActive: false,
-    remainingTime: timerInterface.startTime,
-  } as ITimer);
-
-  /**
-   *
+   * 
    */
   useEffect(() => {
-    const _tick = (): void => {
-      if (topTimer.remainingTime > 0 && botTimer.remainingTime > 0) {
-        if (topTimer.isActive && !botTimer.isActive) {
-          _handleTopTick();
-        } else if (botTimer.isActive && !topTimer.isActive) {
-          _handleBotTick();
-        }
-      } else {
-        clearInterval(_interval);
+    const unsubscribe = navigation.addListener("focus", () => {
+      setTimer(initialState);
+      clearInterval(timerID);
+    });
+    return unsubscribe;
+  }, [navigation, timerInterface]);
+
+  /**
+   * 
+   */
+  useEffect(() => {
+    if (timerInterface.status === "ready") dispatch(changeStatus("live"));
+
+    const _tick = () => {
+      if (timerInterface.status === "live") {
+        if (timer.top.isActive) _decrement("top");
+        if (timer.bot.isActive) _decrement("bot");
       }
     };
 
-    if (timerInterface.status === "live") {
-      _setInterval(setInterval(() => _tick(), UPDATE_DELAY));
-      return () => clearInterval(_interval);
-    }
-  }, [topTimer, botTimer]);
+    setTimerID(
+      setInterval(() => {
+        _tick();
+      }, UPDATE_DELAY)
+    );
+
+    return () => clearInterval(timerID);
+  }, [timer]);
 
   /**
-   *
+   * 
+   * @param timerKey 
    */
-  const _handleTopTick = (): void => {
-    setTopTimer({
-      ...topTimer,
-      remainingTime: topTimer.remainingTime - 1,
+  const onTimerPress = (timerKey: keyof TimerState) => {
+    // if both are inactive
+    if (!timer.top.isActive && !timer.bot.isActive) {
+      _changeState(timerKey);
+
+      // if only one is inactive
+    } else if (!timer[timerKey].isActive) {
+      _switchState(timerKey);
+    }
+
+    if (timerID) {
+      clearInterval(timerID);
+    }
+  };
+
+  const pause = () => { 
+
+  }
+
+  /**
+   * 
+   * @param timerKey 
+   */
+  const _changeState = (timerKey: keyof TimerState) => {
+    setTimer({
+      ...timer,
+      [timerKey]: { ...timer[timerKey], isActive: !timer[timerKey].isActive },
     });
   };
 
   /**
-   *
+   * 
+   * @param timerKey 
    */
-  const _handleBotTick = (): void => {
-    setBotTimer({
-      ...botTimer,
-      remainingTime: botTimer.remainingTime - 1,
+  const _switchState = (timerKey: keyof TimerState) => {
+    //
+    let topIncrement: number = 0,
+      botIncrement: number = 0;
+
+    //
+    switch (timerKey) {
+      case "top":
+        botIncrement = timerInterface.increment;
+        break;
+      case "bot":
+        topIncrement = timerInterface.increment;
+        break;
+    }
+
+    setTimer({
+      top: {
+        ...timer.top,
+        isActive: !timer.top.isActive,
+        time: timer.top.time + topIncrement,
+      },
+      bot: {
+        ...timer.bot,
+        isActive: !timer.bot.isActive,
+        time: timer.bot.time + botIncrement,
+      },
     });
   };
 
   /**
-   *
+   * 
+   * @param timerKey 
    */
-  const reset = (): void => {
-  };
-
-  /**
-   *
-   */
-  const pause = (): void => {
-    dispatch(changeStatus("ready"));
-  };
-
-  /**
-   *
-   */
-  const start = (timer: TimerType): void => {
-    if (timerInterface.status !== "ready") return;
-    dispatch(changeStatus("live"));
-
-    switch (timer) {
-      case "top":
-        setTopTimer({ ...topTimer, isActive: true });
-        return;
-      case "bot":
-        setBotTimer({ ...botTimer, isActive: true });
-        return;
-    }
-  };
-
-  /**
-   *
-   */
-  const increment = (): void => {};
-
-  /**
-   *
-   */
-  const setActiveTimer = (timer: TimerType): void => {
-    switch (timer) {
-      case "top":
-        if (!topTimer.isActive && botTimer.isActive) {
-          setTopTimer({ ...topTimer, isActive: true });
-          setBotTimer({
-            ...botTimer,
-            isActive: false,
-          });
-        }
-        return;
-      case "bot":
-        if (!botTimer.isActive && topTimer.isActive) {
-          setTopTimer({
-            ...topTimer,
-            isActive: false,
-          });
-          setBotTimer({
-            ...botTimer,
-            isActive: true,
-          });
-        }
-        return;
-    }
-  };
-
-  /**
-   *
-   * @param timer
-   */
-  const onTimerPress = (timer: TimerType) => {
-    switch (timerInterface.status) {
-      case "ready":
-        start(timer);
-        break;
-      case "live":
-        setActiveTimer(timer);
-        break;
+  const _decrement = (timerKey: keyof TimerState) => {
+    if (timer[timerKey].isActive && timer[timerKey].time > 0) {
+      setTimer({
+        ...timer,
+        [timerKey]: { ...timer[timerKey], time: timer[timerKey].time - 1 },
+      });
     }
   };
 
@@ -167,20 +161,8 @@ export const HomeScreen: React.FC = () => {
     <Center backgroundColor={theme.secondary} px={4} flex={1}>
       {/* TIMER */}
       <VStack alignItems="center">
-        <Timer
-          name={"top"}
-          color={theme}
-          isActive={topTimer.isActive}
-          time={toMMSS(topTimer.remainingTime)}
-          handlePress={onTimerPress}
-        />
-        <Timer
-          name={"bot"}
-          color={theme}
-          isActive={botTimer.isActive}
-          time={toMMSS(botTimer.remainingTime)}
-          handlePress={onTimerPress}
-        />
+        <Timer timer={timer.top} color={theme} handlePress={onTimerPress} />
+        <Timer timer={timer.bot} color={theme} handlePress={onTimerPress} />
       </VStack>
 
       {/* MENU */}
@@ -199,7 +181,7 @@ export const HomeScreen: React.FC = () => {
           name="pause"
           icon={MaterialIcons}
           isRound={true}
-          onPress={pause}
+          onPress={() => {}}
         />
       </HStack>
     </Center>

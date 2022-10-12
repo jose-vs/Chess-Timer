@@ -10,7 +10,7 @@ import { Entypo, Ionicons, Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // import AppLoading from "expo-app-loading";
-import { DEFAULT_TIMER, ITimerInterface } from "../../models/timer";
+import { ITimerInterface } from "../../models/timer";
 import { Mode } from "./components/Mode";
 
 export type SettingsScreenProps = StackNavigationProp<
