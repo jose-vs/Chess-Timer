@@ -1,30 +1,60 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Box, HStack, VStack } from "native-base";
+import { Box, HStack, Text } from "native-base";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../components";
 import { RootState } from "../../models/root-stores/root-store";
 import { StackNavigatorParamList } from "../../navigators";
 import { Entypo, Ionicons, Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// import AppLoading from "expo-app-loading";
 import { ITimerInterface } from "../../models/timer";
-import { Mode } from "./components/Mode";
+import { Pressable, StyleSheet } from "react-native";
+import { changeMode } from "../../models/app-slice/modeSlice";
 
+/**
+ *
+ */
 export type SettingsScreenProps = StackNavigationProp<
   StackNavigatorParamList,
   "settings"
 >;
 
+/**
+ *
+ * @param items
+ * @returns
+ */
+const useSelectionChange = (items: ITimerInterface[]): boolean => {
+  const [selectionMode, setSelectionMode] = useState<boolean>(false);
+  useEffect(() => {
+    if (items.filter((i) => i.selected).length > 0) {
+      setSelectionMode(true);
+    } else {
+      setSelectionMode(false);
+    }
+  });
+
+  return selectionMode;
+};
+
+/**
+ *
+ * @returns
+ */
 export const SettingsScreen: React.FC = () => {
+  const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.theme);
   const navigation = useNavigation<SettingsScreenProps>();
   const [modes, setModes] = useState<ITimerInterface[]>(
     [] as ITimerInterface[]
   );
 
+  const selectionMode = useSelectionChange(modes);
+
+  /**
+   *
+   */
   useEffect(() => {
     const getData = async () => {
       try {
@@ -56,15 +86,88 @@ export const SettingsScreen: React.FC = () => {
     };
   }, []);
 
-  // if (!ready) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadMode}
-  //       onFinish={() => setReady(true)}
-  //       onError={console.error}
-  //     />
-  //   )
-  // }
+  /**
+   *
+   * @param mode
+   */
+  const toggleSelect = (mode: ITimerInterface): void => {
+    setModes(
+      modes.map((i) => {
+        if (mode === i) {
+          i.selected = !i.selected;
+        }
+        return i;
+      })
+    );
+  };
+
+  /**
+   *
+   */
+  const clearSelection = (): void => {
+    setModes(
+      modes.map((i) => {
+        i.selected = false;
+        return i;
+      })
+    );
+  };
+
+  /**
+   *
+   * @param mode
+   */
+  const onPress = (mode: ITimerInterface): void => {
+    if (selectionMode) {
+      toggleSelect(mode);
+    } else {
+      pressItem(mode);
+    }
+  };
+
+  /**
+   *
+   * @param mode
+   */
+  const onLongPress = (mode: ITimerInterface): void => {
+    if (selectionMode === false) {
+      toggleSelect(mode);
+    }
+  };
+
+  /**
+   *
+   * @param mode
+   */
+  const pressItem = (mode: ITimerInterface): void => {
+    dispatch(changeMode(mode));
+    navigation.navigate("home");
+  };
+
+  /**
+   *
+   */
+  const handleDelete = (): void => {};
+
+  /**
+   *
+   * @param mode
+   * @returns
+   */
+  const renderModeItem = (mode: ITimerInterface): JSX.Element => {
+    return (
+      <Pressable
+        onPress={() => onPress(mode)}
+        onLongPress={() => onLongPress(mode)}
+        key={mode.key}
+        style={[mode.selected ? style.selected : style.normal]}
+      >
+        <Box>
+          <Text>{mode.name}</Text>
+        </Box>
+      </Pressable>
+    );
+  };
 
   return (
     <Box px={4} flex={1}>
@@ -77,7 +180,13 @@ export const SettingsScreen: React.FC = () => {
             console.log(modes);
           }}
         />
-        <Button name="edit" icon={Feather} onPress={() => {}} />
+        <Button
+          name="edit"
+          icon={Feather}
+          onPress={() => {
+            navigation.navigate("mode");
+          }}
+        />
         <Button
           name="color-palette"
           icon={Ionicons}
@@ -86,10 +195,18 @@ export const SettingsScreen: React.FC = () => {
           }}
         />
       </HStack>
-
-      {modes?.map((value, index) => {
-        return <Mode timer={value} key={index} />;
+      {modes.map((mode) => {
+        return renderModeItem(mode);
       })}
     </Box>
   );
 };
+
+const style = StyleSheet.create({
+  selected: {
+    backgroundColor: "lightgray",
+    marginLeft: 0,
+    paddingLeft: 18,
+  },
+  normal: {},
+});

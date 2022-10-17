@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Timer } from "./components/Timer";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParamList } from "../../navigators";
-import { ITimer, TimerState } from "../../models/timer";
+import { TimerState } from "../../models/timer";
 import { changeStatus } from "../../models/app-slice/modeSlice";
 
 type HomeScreenProps = StackNavigationProp<StackNavigatorParamList, "home">;

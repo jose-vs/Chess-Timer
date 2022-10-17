@@ -8,6 +8,7 @@ const initialState: ITimerInterface = {
   status: "ready",
   increment: 0,
   startTime: 600,
+  selected: false
 };
 
 export const modeSlice = createSlice({

@@ -7,6 +7,7 @@ export interface ITimerInterface {
   status: TimerStatus;
   increment: number;
   startTime: number;
+  selected: boolean
 }
 
 export interface ITimer {

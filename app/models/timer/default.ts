@@ -7,6 +7,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
     status: "ready",
     startTime: 60,
     increment: 0,
+    selected: false
   },
   {
     name: "3 min",
@@ -14,6 +15,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
     status: "ready",
     startTime: 180,
     increment: 0,
+    selected: false
   },
   {
     name: "5 min",
@@ -21,6 +23,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
     status: "ready",
     startTime: 300,
     increment: 0,
+    selected: false
   },
   {
     name: "10 min",
@@ -28,6 +31,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
     status: "ready",
     startTime: 600,
     increment: 0,
+    selected: false
   },
   {
     name: "30 min",
@@ -35,6 +39,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
     status: "ready",
     startTime: 1800,
     increment: 0,
+    selected: false
   },
   {
     name: "3|2",
@@ -42,6 +47,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
     status: "ready",
     startTime: 180,
     increment: 2,
+    selected: false
   },
 
   {
@@ -50,5 +56,6 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
     status: "ready",
     startTime: 300,
     increment: 5,
+    selected: false
   },
 ];
