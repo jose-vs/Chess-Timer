@@ -8,6 +8,10 @@
       "dom", 
       "ESNext"
     ], 
+    "typeRoots": [
+      "./typings",
+      "./node_modules/@types/"
+    ],
     "moduleResolution": "node", 
     "noEmit": true, 
     "skipLibCheck": true, 

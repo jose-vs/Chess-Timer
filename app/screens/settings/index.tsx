@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Box, HStack, Text } from "native-base";
+import { Box, HStack, Text, IconButton, Icon } from "native-base";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../components";
@@ -162,9 +162,10 @@ export const SettingsScreen: React.FC = () => {
         key={mode.key}
         style={[mode.selected ? style.selected : style.normal]}
       >
-        <Box>
+        <HStack>
           <Text>{mode.name}</Text>
-        </Box>
+          {selectionMode ? <IconButton size={"md"} onPress={() => {}} icon={<Icon as={Feather} name={"edit"}/>}/> : null}
+        </HStack>
       </Pressable>
     );
   };
@@ -176,13 +177,6 @@ export const SettingsScreen: React.FC = () => {
         <Button
           name="plus"
           icon={Entypo}
-          onPress={() => {
-            console.log(modes);
-          }}
-        />
-        <Button
-          name="edit"
-          icon={Feather}
           onPress={() => {
             navigation.navigate("mode");
           }}
@@ -205,8 +199,10 @@ export const SettingsScreen: React.FC = () => {
 const style = StyleSheet.create({
   selected: {
     backgroundColor: "lightgray",
-    marginLeft: 0,
+    padding: 10,
     paddingLeft: 18,
   },
-  normal: {},
+  normal: {
+    padding: 10
+  },
 });

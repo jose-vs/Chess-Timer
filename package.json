@@ -31,9 +31,11 @@
     "react-native": "0.64.3",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-safe-area-context": "3.3.2",
+    "react-native-segmented-picker": "^2.0.2",
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
-    "react-redux": "^8.0.2"
+    "react-redux": "^8.0.2",
+    "save": "^2.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

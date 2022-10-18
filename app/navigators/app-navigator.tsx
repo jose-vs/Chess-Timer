@@ -41,7 +41,7 @@ const AppStack = () => {
         component={NewModeScreen}
         options={{
           headerShown: true,
-          headerTitle: "Create New Mode",
+          headerTitle: "",
           headerBackTitleVisible: true,
         }}
       />
