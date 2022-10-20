@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../components";
 import { RootState } from "../../models/root-stores/root-store";
 import { StackNavigatorParamList } from "../../navigators";
-import { Entypo, Ionicons, Feather } from "@expo/vector-icons";
+import { Entypo, Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ITimerInterface } from "../../models/timer";
 import { Pressable, StyleSheet } from "react-native";
@@ -147,7 +147,24 @@ export const SettingsScreen: React.FC = () => {
   /**
    *
    */
-  const handleDelete = (): void => {};
+  const handleDelete = (): void => {
+    const modeUpdate: ITimerInterface[] = modes.filter((mode) => {
+      if (mode.selected) {
+        deleteItem(mode.key);
+        return false;
+      } else return true;
+    });
+
+    setModes(modeUpdate);
+  };
+
+  const deleteItem = async (key: string): Promise<void> => {
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (e) {
+      // remove error
+    }
+  };
 
   /**
    *
@@ -164,7 +181,13 @@ export const SettingsScreen: React.FC = () => {
       >
         <HStack>
           <Text>{mode.name}</Text>
-          {selectionMode ? <IconButton size={"md"} onPress={() => {}} icon={<Icon as={Feather} name={"edit"}/>}/> : null}
+          {selectionMode ? (
+            <IconButton
+              size={"md"}
+              onPress={() => {}}
+              icon={<Icon as={Feather} name={"edit"} />}
+            />
+          ) : null}
         </HStack>
       </Pressable>
     );
@@ -174,6 +197,7 @@ export const SettingsScreen: React.FC = () => {
     <Box px={4} flex={1}>
       {/* Buttons */}
       <HStack space={"lg"} justifyContent={"flex-end"} marginTop={2}>
+        <Button name="delete" icon={MaterialIcons} onPress={handleDelete} />
         <Button
           name="plus"
           icon={Entypo}
@@ -203,6 +227,6 @@ const style = StyleSheet.create({
     paddingLeft: 18,
   },
   normal: {
-    padding: 10
+    padding: 10,
   },
 });
