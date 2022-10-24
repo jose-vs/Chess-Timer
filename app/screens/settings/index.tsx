@@ -43,7 +43,7 @@ const useSelectionChange = (items: ITimerInterface[]): boolean => {
  * @returns
  */
 export const SettingsScreen: React.FC = () => {
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.theme);
   const navigation = useNavigation<SettingsScreenProps>();
@@ -62,19 +62,24 @@ export const SettingsScreen: React.FC = () => {
         await AsyncStorage.getAllKeys()
           .then((modes_keys) => {
             return Promise.all(
-              modes_keys.map(async (key) => {
-                const _mode = await AsyncStorage.getItem(key);
+              modes_keys
+                .filter((key) => {
+                  if (key === "_init") return false;
+                  else return true;
+                })
+                .map(async (key) => {
 
-                return _mode != null ? _mode : null;
-              })
+                  const _mode = await AsyncStorage.getItem(key);
+
+                  return _mode != null ? _mode : null;
+                })
             );
           })
           .then((mode) => {
             setModes(
               mode.map((_mode) => {
-                if (_mode) { 
+                if (_mode !== null) {
 
-                  
                   return JSON.parse(_mode);
                 }
               })
@@ -97,8 +102,7 @@ export const SettingsScreen: React.FC = () => {
    * @param mode
    */
   const toggleSelect = (mode: ITimerInterface): void => {
-
-    console.log("[MODE SELECTED]: ", mode)
+    console.log("[MODE SELECTED]: ", mode);
 
     setModes(
       modes.map((i) => {

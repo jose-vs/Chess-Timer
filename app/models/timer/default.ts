@@ -6,7 +6,7 @@ import { v4 as uuidv4  } from 'uuid';
 export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   {
     name: "1 min",
-    key: "1",
+    key: uuidv4(),
     status: "ready",
     startTime: 60,
     increment: 0,
@@ -14,7 +14,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "3 min",
-    key: "2",
+    key: uuidv4(),
     status: "ready",
     startTime: 180,
     increment: 0,
@@ -22,7 +22,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "5 min",
-    key: "3",
+    key: uuidv4(),
     status: "ready",
     startTime: 300,
     increment: 0,
@@ -30,7 +30,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "10 min",
-    key: "4",
+    key: uuidv4(),
     status: "ready",
     startTime: 600,
     increment: 0,
@@ -38,7 +38,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "30 min",
-    key: "5",
+    key: uuidv4(),
     status: "ready",
     startTime: 1800,
     increment: 0,
@@ -46,7 +46,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "3|2",
-    key: "6",
+    key: uuidv4(),
     status: "ready",
     startTime: 180,
     increment: 2,
@@ -55,7 +55,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
 
   {
     name: "5|5",
-    key: "7",
+    key: uuidv4(),
     status: "ready",
     startTime: 300,
     increment: 5,
