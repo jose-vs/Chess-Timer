@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Box, HStack, Text, IconButton, Icon } from "native-base";
 import React, { useState, useEffect } from "react";
@@ -43,6 +43,7 @@ const useSelectionChange = (items: ITimerInterface[]): boolean => {
  * @returns
  */
 export const SettingsScreen: React.FC = () => {
+  const isFocused = useIsFocused()
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.theme);
   const navigation = useNavigation<SettingsScreenProps>();
@@ -63,6 +64,7 @@ export const SettingsScreen: React.FC = () => {
             return Promise.all(
               modes_keys.map(async (key) => {
                 const _mode = await AsyncStorage.getItem(key);
+
                 return _mode != null ? _mode : null;
               })
             );
@@ -70,7 +72,11 @@ export const SettingsScreen: React.FC = () => {
           .then((mode) => {
             setModes(
               mode.map((_mode) => {
-                if (_mode) return JSON.parse(_mode);
+                if (_mode) { 
+
+                  
+                  return JSON.parse(_mode);
+                }
               })
             );
           });
@@ -84,13 +90,16 @@ export const SettingsScreen: React.FC = () => {
     return () => {
       setModes([] as ITimerInterface[]);
     };
-  }, []);
+  }, [isFocused]);
 
   /**
    *
    * @param mode
    */
   const toggleSelect = (mode: ITimerInterface): void => {
+
+    console.log("[MODE SELECTED]: ", mode)
+
     setModes(
       modes.map((i) => {
         if (mode === i) {
@@ -184,7 +193,9 @@ export const SettingsScreen: React.FC = () => {
           {selectionMode ? (
             <IconButton
               size={"md"}
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate("mode", mode.key);
+              }}
               icon={<Icon as={Feather} name={"edit"} />}
             />
           ) : null}

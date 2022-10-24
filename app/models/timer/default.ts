@@ -1,9 +1,12 @@
 import { ITimerInterface } from "./types";
+import 'react-native-get-random-values';
+import { v4 as uuidv4  } from 'uuid';
+
 
 export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   {
     name: "1 min",
-    key: "@1 min_key",
+    key: "1",
     status: "ready",
     startTime: 60,
     increment: 0,
@@ -11,7 +14,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "3 min",
-    key: "@3 min_key",
+    key: "2",
     status: "ready",
     startTime: 180,
     increment: 0,
@@ -19,7 +22,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "5 min",
-    key: "@5 min_key",
+    key: "3",
     status: "ready",
     startTime: 300,
     increment: 0,
@@ -27,7 +30,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "10 min",
-    key: "@10 min_key",
+    key: "4",
     status: "ready",
     startTime: 600,
     increment: 0,
@@ -35,7 +38,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "30 min",
-    key: "@30 min_key",
+    key: "5",
     status: "ready",
     startTime: 1800,
     increment: 0,
@@ -43,7 +46,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
   },
   {
     name: "3|2",
-    key: "@3|2_key",
+    key: "6",
     status: "ready",
     startTime: 180,
     increment: 2,
@@ -52,7 +55,7 @@ export const DEFAULT_TIMER_MODES: ITimerInterface[] = [
 
   {
     name: "5|5",
-    key: "@5|5_key",
+    key: "7",
     status: "ready",
     startTime: 300,
     increment: 5,

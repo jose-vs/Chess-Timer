@@ -59,8 +59,6 @@ export const HomeScreen: React.FC = () => {
    *
    */
   useEffect(() => {
-    console.log(timerInterface.status);
-
     const _tick = () => {
       if (timerInterface.status === "live") {
         if (timer.top.isActive) _decrement("top");

@@ -15,12 +15,15 @@ import SegmentedPicker, {
   PickerOptions,
 } from "react-native-segmented-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ITimerInterface } from "../../models/timer";
-import { toSeconds } from "../../utils";
+import { toMMSS, toSeconds } from "../../utils";
 import { StackNavigatorParamList } from "../../navigators";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  *
@@ -30,8 +33,46 @@ export type NewModeScreenProps = StackNavigationProp<
   "mode"
 >;
 
-export const NewModeScreen: React.FC = () => {
+export const NewModeScreen: React.FC = (props: any) => {
   const navigation = useNavigation<NewModeScreenProps>();
+
+  useEffect(() => {
+    const getItem = async () => {
+      if (isUpdate()) {
+        try {
+          const updateMode = await AsyncStorage.getItem(props.route.params);
+
+          console.log("[MODE TO UPDATE]: ", updateMode);
+
+          if (updateMode != null) {
+            const json_mode: ITimerInterface = JSON.parse(updateMode);
+
+            setName(json_mode.name);
+            setKey(json_mode.key);
+            setNamePlaceholder(json_mode.name);
+            setIncrement(json_mode.increment.toString());
+
+            let time = toMMSS(json_mode.startTime);
+            if (time.length <= 5) time = "00:" + time;
+
+            setTime(time);
+          }
+        } catch (e) {
+          // read error
+        }
+      }
+    };
+
+    getItem();
+  }, []);
+
+  /**
+   *
+   * @returns
+   */
+  const isUpdate = (): boolean => {
+    return props.route.params !== undefined;
+  };
 
   /**
    *
@@ -48,8 +89,10 @@ export const NewModeScreen: React.FC = () => {
   /**
    *
    */
+  const [namePlaceholder, setNamePlaceholder] = useState<string>("Name");
   const [name, setName] = useState<string>();
-  const [increment, setIncrement] = useState<string | undefined>();
+  const [key, setKey] = useState<string>();
+  const [increment, setIncrement] = useState<string>("0");
   const [time, setTime] = useState<string>("00:10:00");
 
   /**
@@ -113,42 +156,80 @@ export const NewModeScreen: React.FC = () => {
     },
   ];
 
+  /**
+   *
+   */
   const handleOnPress = async (): Promise<void> => {
     if (!name) {
       setNameEmpty(true);
     } else {
-      const key = "@" + name + "_key";
+      const mode: ITimerInterface = {
+        name: name,
+        key: props.route.params ? props.route.params : uuidv4(),
+        status: "ready",
+        increment: increment ? parseInt(increment) : 0,
+        startTime: toSeconds(time),
+        selected: false,
+      };
 
-      if (!(await checkExisting(key))) {
+      if (!(await checkExisting(name))) {
         setNameEmpty(false);
         setNameExists(false);
 
-        const mode: ITimerInterface = {
-          name: name,
-          key: key,
-          status: "ready",
-          increment: increment ? parseInt(increment) : 0,
-          startTime: toSeconds(time),
-          selected: false,
-        };
-
         await storeData(mode);
         navigation.navigate("settings");
-      } else {
-        setNameExists(true);
+      }
+
+      if (!isUpdate()) setNameExists(true);
+      else {
+        await updateItem(props.route.params, mode);
+        navigation.navigate("settings");
       }
     }
   };
 
-  const checkExisting = async (key: string): Promise<boolean> => {
+  const updateItem = async (key: string, mode: ITimerInterface) => {
     try {
-      const value = await AsyncStorage.getItem(key);
-      return value !== null;
+      await AsyncStorage.mergeItem(key, JSON.stringify(mode));
+      const checkUpdated = await AsyncStorage.getItem(key);
+
+      if (checkUpdated === null)
+        throw new Error("[UPDATING FAILED]: " + JSON.stringify(mode));
+      else console.log("[UPDATED SUCCESFULLY]: ", mode);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const checkExisting = async (name: string): Promise<boolean> => {
+    let exists: boolean = false;
+
+    try {
+      await AsyncStorage.getAllKeys()
+        .then((modes_keys) => {
+          return Promise.all(
+            modes_keys.map(async (key) => {
+              const _mode = await AsyncStorage.getItem(key);
+              return _mode != null ? _mode : null;
+            })
+          );
+        })
+        .then((modes) => {
+          modes.forEach((_mode) => {
+            if (_mode) {
+              const json_mode = JSON.parse(_mode) as ITimerInterface;
+              if (json_mode.name === name) {
+                console.log("[MODE FOUND]: ", json_mode);
+                exists = true;
+              }
+            }
+          });
+        });
     } catch (e) {
       // error reading value
     }
 
-    return true;
+    return exists;
   };
 
   /**
@@ -159,6 +240,8 @@ export const NewModeScreen: React.FC = () => {
     try {
       const mode_json = JSON.stringify(mode);
       await AsyncStorage.setItem(mode.key, mode_json);
+
+      console.log("[MODE SAVED SUCCESFULLY]: ", mode);
     } catch (e) {
       // saving error
     }
@@ -201,7 +284,6 @@ export const NewModeScreen: React.FC = () => {
             ref={React.createRef()}
             visible={timePickMode}
             onConfirm={(selections) => {
-              console.info(selections);
               setTime(
                 selections.hour +
                   ":" +
@@ -218,7 +300,6 @@ export const NewModeScreen: React.FC = () => {
             ref={React.createRef()}
             visible={incrementPickMode}
             onConfirm={(selections) => {
-              console.info(selections);
               setIncrement(selections.increment);
               setIncrementPickMode(false);
             }}
@@ -230,7 +311,7 @@ export const NewModeScreen: React.FC = () => {
           <FormControl isInvalid={nameEmpty || nameExists} mb="5">
             <FormControl.Label>Mode Name</FormControl.Label>
             <Input
-              placeholder="Name"
+              placeholder={namePlaceholder}
               onChangeText={(text) => {
                 setName(text);
               }}
@@ -241,7 +322,7 @@ export const NewModeScreen: React.FC = () => {
           <FormControl mb="5">
             <FormControl.Label>Increment</FormControl.Label>
             <Input
-              placeholder="0"
+              placeholder={increment}
               onPressIn={() => setIncrementPickMode(true)}
               value={increment}
             />

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { HomeScreen, SettingsScreen, ThemeScreen, NewModeScreen } from "../screens";
 
@@ -32,7 +32,7 @@ const AppStack = () => {
         component={SettingsScreen}
         options={{
           headerShown: true,
-          headerTitle: "Settings",
+          headerTitle: "",
           headerBackTitleVisible: true,
         }}
       />
@@ -50,7 +50,7 @@ const AppStack = () => {
         component={ThemeScreen}
         options={{
           headerShown: true,
-          headerTitle: "Theme",
+          headerTitle: "",
           headerBackTitleVisible: true,
         }}
       />
