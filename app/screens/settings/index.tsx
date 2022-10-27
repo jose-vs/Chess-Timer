@@ -64,13 +64,11 @@ export const SettingsScreen: React.FC = () => {
             return Promise.all(
               modes_keys
                 .filter((key) => {
-                  if (key === "_init") return false;
+                  if (key === "_init" || key === "_theme") return false;
                   else return true;
                 })
                 .map(async (key) => {
-
                   const _mode = await AsyncStorage.getItem(key);
-
                   return _mode != null ? _mode : null;
                 })
             );

@@ -8,6 +8,7 @@ import { StackNavigatorParamList } from "../../navigators";
 import { Sample, ThemeButton } from "./components";
 import { AppPallette } from "../../theme";
 import { ThemeState, changeTheme } from "../../models/app-slice/themeSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ThemeScreenProps = StackNavigationProp<StackNavigatorParamList, "theme">;
 
@@ -24,10 +25,24 @@ export const ThemeScreen: React.FC = () => {
     setCurrentTheme(theme);
   };
 
-  const handleApplyOnPress = () => { 
-    dispatch(changeTheme(currentTheme))
-    navigation.navigate("home")
-  }
+  const handleApplyOnPress = () => {
+    dispatch(changeTheme(currentTheme));
+    storeTheme();
+    navigation.navigate("home");
+  };
+
+  const storeTheme = async () => {
+    try {
+      await AsyncStorage.mergeItem("_theme", JSON.stringify(currentTheme));
+
+      const theme = await AsyncStorage.getItem("_theme");
+      if (theme) console.log("[THEME SAVED SUCCESFULLY]: " + currentTheme);
+      else console.log("[THEME SAVED UNSUCCESFULLY]: " + currentTheme);
+
+    } catch (e) {
+      // saving error
+    }
+  };
 
   return (
     <Center px={4} flex={1}>
@@ -65,7 +80,12 @@ export const ThemeScreen: React.FC = () => {
             />
           </HStack>
         </Box>
-        <Button m={4} paddingLeft={10} paddingRight={10} onPress={handleApplyOnPress}>
+        <Button
+          m={4}
+          paddingLeft={10}
+          paddingRight={10}
+          onPress={handleApplyOnPress}
+        >
           Apply
         </Button>
       </VStack>
