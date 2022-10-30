@@ -176,8 +176,8 @@ export const NewModeScreen: React.FC = (props: any) => {
         setNameEmpty(false);
         setNameExists(false);
 
-        await storeData(mode);
         navigation.navigate("settings");
+        await storeData(mode);
       }
 
       if (!isUpdate()) setNameExists(true);

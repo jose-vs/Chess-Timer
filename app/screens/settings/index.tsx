@@ -1,6 +1,6 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Box, HStack, Text, IconButton, Icon } from "native-base";
+import { Box, HStack, Text, IconButton, Icon, ScrollView } from "native-base";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../components";
@@ -77,7 +77,6 @@ export const SettingsScreen: React.FC = () => {
             setModes(
               mode.map((_mode) => {
                 if (_mode !== null) {
-
                   return JSON.parse(_mode);
                 }
               })
@@ -226,9 +225,12 @@ export const SettingsScreen: React.FC = () => {
           }}
         />
       </HStack>
-      {modes.map((mode) => {
-        return renderModeItem(mode);
-      })}
+      <ScrollView
+      >
+        {modes.map((mode) => {
+          return renderModeItem(mode);
+        })}
+      </ScrollView>
     </Box>
   );
 };
