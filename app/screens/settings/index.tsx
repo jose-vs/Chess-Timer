@@ -176,6 +176,22 @@ export const SettingsScreen: React.FC = () => {
     }
   };
 
+  const style = StyleSheet.create({
+    selected: {
+      backgroundColor: theme.list.selected,
+      padding: 10,
+      margin: 5,
+      paddingLeft: 18,
+      borderRadius: 5,
+    },
+    normal: {
+      padding: 10,
+      margin: 5,
+      borderRadius: 5,
+      backgroundColor: theme.list.backgroundcolor,
+    },
+  });
+
   /**
    *
    * @param mode
@@ -183,50 +199,60 @@ export const SettingsScreen: React.FC = () => {
    */
   const renderModeItem = (mode: ITimerInterface): JSX.Element => {
     return (
-      <Pressable
-        onPress={() => onPress(mode)}
-        onLongPress={() => onLongPress(mode)}
+      <Box
         key={mode.key}
-        style={[mode.selected ? style.selected : style.normal]}
+ 
       >
-        <HStack>
-          <Text>{mode.name}</Text>
-          {selectionMode ? (
-            <IconButton
-              size={"md"}
-              onPress={() => {
-                navigation.navigate("mode", mode.key);
-              }}
-              icon={<Icon as={Feather} name={"edit"} />}
-            />
-          ) : null}
-        </HStack>
-      </Pressable>
+        <Pressable
+          onPress={() => onPress(mode)}
+          onLongPress={() => onLongPress(mode)}
+          style={[mode.selected ? style.selected : style.normal]}
+        >
+          <HStack justifyContent={"space-between"}>
+            <Text m={3} color={theme.list.text}>{mode.name}</Text>
+            {selectionMode ? (
+              <IconButton
+                size={"md"}
+                onPress={() => {
+                  navigation.navigate("mode", mode.key);
+                }}
+                icon={<Icon as={Feather} name={"edit"} />}
+              />
+            ) : null}
+          </HStack>
+        </Pressable>
+      </Box>
     );
   };
 
   return (
-    <Box px={4} flex={1}>
+    <Box px={4} flex={1} backgroundColor={theme.backgroundColour}>
       {/* Buttons */}
-      <HStack space={"lg"} justifyContent={"flex-end"} marginTop={2}>
-        <Button name="delete" icon={MaterialIcons} onPress={handleDelete} />
-        <Button
-          name="plus"
-          icon={Entypo}
-          onPress={() => {
-            navigation.navigate("mode");
-          }}
-        />
-        <Button
-          name="color-palette"
-          icon={Ionicons}
-          onPress={() => {
-            navigation.navigate("theme");
-          }}
-        />
+      <HStack justifyContent={"space-between"} marginTop={5} marginBottom={5}>
+        <HStack space={"lg"} justifyContent={"flex-end"}>
+          {selectionMode ? (
+            <Button name="delete" icon={MaterialIcons} onPress={handleDelete} />
+          ) : null}
+        </HStack>
+        <HStack space={"lg"} justifyContent={"flex-end"}>
+          <Button
+            name="plus"
+            icon={Entypo}
+            onPress={() => {
+              navigation.navigate("mode");
+            }}
+          />
+          <Button
+            name="color-palette"
+            icon={Ionicons}
+            onPress={() => {
+              navigation.navigate("theme");
+            }}
+          />
+        </HStack>
       </HStack>
-      <ScrollView
-      >
+
+      <ScrollView>
         {modes.map((mode) => {
           return renderModeItem(mode);
         })}
@@ -235,13 +261,4 @@ export const SettingsScreen: React.FC = () => {
   );
 };
 
-const style = StyleSheet.create({
-  selected: {
-    backgroundColor: "lightgray",
-    padding: 10,
-    paddingLeft: 18,
-  },
-  normal: {
-    padding: 10,
-  },
-});
+

@@ -272,7 +272,6 @@ export const NewModeScreen: React.FC = (props: any) => {
         alignSelf="center"
         px="4"
         safeArea
-        mt="4"
         w={{
           base: "100%",
           md: "25%",

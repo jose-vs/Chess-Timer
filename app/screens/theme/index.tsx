@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Box, Center, HStack, VStack, Button } from "native-base";
+import { Box, Center, HStack, VStack, Button, ScrollView } from "native-base";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../models/root-stores/root-store";
@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 type ThemeScreenProps = StackNavigationProp<StackNavigatorParamList, "theme">;
 
 export const ThemeScreen: React.FC = () => {
+
   const [currentTheme, setCurrentTheme] = useState(
     useSelector((state: RootState) => state.theme)
   );
@@ -38,57 +39,59 @@ export const ThemeScreen: React.FC = () => {
       const theme = await AsyncStorage.getItem("_theme");
       if (theme) console.log("[THEME SAVED SUCCESFULLY]: " + currentTheme);
       else console.log("[THEME SAVED UNSUCCESFULLY]: " + currentTheme);
-
     } catch (e) {
       // saving error
     }
   };
 
   return (
-    <Center px={4} flex={1}>
-      <VStack alignItems={"center"}>
-        {/* SAMPLE */}
-        <Sample theme={currentTheme} />
-        {/* THEMES */}
-        <Box>
-          <HStack space={"lg"} alignItems="center" m={3}>
-            <ThemeButton
-              theme={AppPallette.theme2}
-              changeTheme={handleThemeOnPress}
-            />
-            <ThemeButton
-              theme={AppPallette.default}
-              changeTheme={handleThemeOnPress}
-            />
-            <ThemeButton
-              theme={AppPallette.default}
-              changeTheme={handleThemeOnPress}
-            />
-          </HStack>
-          <HStack space={"lg"} alignItems="center" m={3}>
-            <ThemeButton
-              theme={AppPallette.theme2}
-              changeTheme={handleThemeOnPress}
-            />
-            <ThemeButton
-              theme={AppPallette.default}
-              changeTheme={handleThemeOnPress}
-            />
-            <ThemeButton
-              theme={AppPallette.default}
-              changeTheme={handleThemeOnPress}
-            />
-          </HStack>
-        </Box>
-        <Button
-          m={4}
-          paddingLeft={10}
-          paddingRight={10}
-          onPress={handleApplyOnPress}
-        >
-          Apply
-        </Button>
-      </VStack>
-    </Center>
+    <ScrollView backgroundColor={"warmGray.200"}>
+      <Center px={4} flex={1}>
+        <VStack alignItems={"center"}>
+          {/* SAMPLE */}
+          <Sample theme={currentTheme} />
+          {/* THEMES */}
+          <Box>
+            <HStack space={"lg"} alignItems="center" m={3}>
+              <ThemeButton
+                theme={AppPallette.default}
+                changeTheme={handleThemeOnPress}
+              />
+              <ThemeButton
+                theme={AppPallette.default}
+                changeTheme={handleThemeOnPress}
+              />
+              <ThemeButton
+                theme={AppPallette.default}
+                changeTheme={handleThemeOnPress}
+              />
+            </HStack>
+            <HStack space={"lg"} alignItems="center" m={3}>
+              <ThemeButton
+                theme={AppPallette.default}
+                changeTheme={handleThemeOnPress}
+              />
+              <ThemeButton
+                theme={AppPallette.default}
+                changeTheme={handleThemeOnPress}
+              />
+              <ThemeButton
+                theme={AppPallette.default}
+                changeTheme={handleThemeOnPress}
+              />
+            </HStack>
+          </Box>
+          <Button
+            m={8}
+            paddingLeft={10}
+            paddingRight={10}
+            onPress={handleApplyOnPress}
+            backgroundColor={"#111517"}
+          >
+            Apply
+          </Button>
+        </VStack>
+      </Center>
+    </ScrollView>
   );
 };

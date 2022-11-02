@@ -178,15 +178,15 @@ export const HomeScreen: React.FC = () => {
   };
 
   return (
-    <Center backgroundColor={theme.secondary} px={4} flex={1}>
+    <Center backgroundColor={theme.timer.backgroundColour} px={4} flex={1}>
       {/* TIMER */}
       <VStack alignItems="center">
-        <Timer timer={timer.top} color={theme} handlePress={onTimerPress} />
-        <Timer timer={timer.bot} color={theme} handlePress={onTimerPress} />
+        <Timer timer={timer.top} styles={theme.timer} handlePress={onTimerPress} />
+        <Timer timer={timer.bot} styles={theme.timer} handlePress={onTimerPress} />
       </VStack>
 
       {/* MENU */}
-      <HStack space={"lg"} alignItems="center" position="absolute">
+      <HStack space={"75"} alignItems="center" position="absolute">
         {/* SETTINGS */}
         <Button
           name="settings"

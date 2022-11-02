@@ -23,7 +23,7 @@
     "@types/react-redux": "^7.1.24",
     "@types/uuid": "^8.3.4",
     "expo": "^46.0.16",
-    "expo-app-loading": "~2.1.0",
+    "expo-font": "^10.2.1",
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "native-base": "3.4.19",

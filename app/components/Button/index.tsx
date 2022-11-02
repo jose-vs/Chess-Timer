@@ -19,12 +19,12 @@ export const Button = (props: ButtonProps) => {
       size={"lg"}
       variant="solid"
       borderRadius={isRound ? "full" : "lg"}
-      bg={theme.buttonPrimary}
+      bg={theme.button.primary}
       _pressed={{
-        bg: theme.pressed, 
+        bg: theme.button.pressed, 
       }}
       _icon={{
-        color: theme.buttonSecondary,
+        color: theme.button.secondary,
         as: icon,
         name: name,
       }}

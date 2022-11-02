@@ -3,11 +3,10 @@ import "react-native-gesture-handler";
 import { NativeBaseProvider } from "native-base";
 import { AppNavigator } from "./navigators";
 import { store } from "./models/root-stores/root-store";
-import { Provider as StoreProvider} from "react-redux";
+import { Provider as StoreProvider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEFAULT_TIMER_MODES } from "./models/timer";
 import { AppPallette } from "./theme";
-import { changeTheme, ThemeState } from "./models/app-slice/themeSlice";
 
 interface InitState {
   beenInit: boolean;
@@ -20,7 +19,6 @@ const initState: InitState = {
 };
 
 export default function App() {
-
   useEffect(() => {
     storeData();
     setTheme();
@@ -74,15 +72,15 @@ export default function App() {
   const setTheme = async () => {
     try {
       const theme = await AsyncStorage.getItem("_theme");
-      if (theme) {
-        const parseInit: ThemeState = JSON.parse(theme);
-        store.dispatch(changeTheme(parseInit));
-      } else {
-        const theme = await AsyncStorage.setItem(
+      // if (theme) {
+      //   const parseInit: ThemeState = JSON.parse(theme);
+      //   store.dispatch(changeTheme(parseInit));
+      // } else {
+        await AsyncStorage.setItem(
           "_theme",
           JSON.stringify(AppPallette.default)
         );
-      }
+      // }
     } catch (e) {
       // saving error
     }

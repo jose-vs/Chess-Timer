@@ -13,7 +13,7 @@ export const ThemeButton = ({ theme, changeTheme }: ThemeButtonProps) => {
       <Pressable onPress={() => changeTheme(theme)}>
         <Box
           borderColor={"coolGray.200"}
-          borderWidth={4}
+          borderWidth={3}
           rounded={"full"}
           shadow={3}
         >
@@ -21,9 +21,9 @@ export const ThemeButton = ({ theme, changeTheme }: ThemeButtonProps) => {
             h={15}
             w={15}
             rounded="full"
-            borderTopColor={theme.primary}
+            borderTopColor={theme.timer.active.backgroundColour}
             borderTopWidth={60}
-            borderRightColor={theme.secondary}
+            borderRightColor={theme.timer.inactive.backgroundColour}
             borderRightWidth={60}
           ></Box>
         </Box>

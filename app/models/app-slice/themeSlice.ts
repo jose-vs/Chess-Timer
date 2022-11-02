@@ -3,12 +3,40 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 import { AppPallette } from "../../theme";
 
+export interface TimerStyles { 
+  active: { 
+    backgroundColour: string
+    text: string
+  }
+  inactive: { 
+    backgroundColour: string
+    text: string
+  }
+  backgroundColour: string  
+}
+
 export interface ThemeState {
-  primary: string;
-  secondary: string;
-  buttonPrimary: string;
-  buttonSecondary: string;
-  pressed: string;
+  timer: TimerStyles
+  button: { 
+    primary: string
+    secondary: string
+    pressed: string
+  }
+  header: { 
+    backgroundColour: string
+    secondaryColour: string
+  }
+  list: { 
+    backgroundcolor: string
+    selected: string
+    text: string
+  }
+  backgroundColour: string
+  secondaryColour: string
+  title: string
+  subtitle: string
+  text: string
+  
 }
 
 const initialState: ThemeState = AppPallette.default;
@@ -18,11 +46,7 @@ export const themeSlice = createSlice({
   initialState,
   reducers: {
     changeTheme: (state, action: PayloadAction<ThemeState>) => {
-      state.primary = action.payload.primary;
-      state.secondary = action.payload.secondary;
-      state.buttonPrimary = action.payload.buttonPrimary;
-      state.buttonSecondary = action.payload.buttonSecondary;
-      state.pressed = action.payload.pressed;
+      state = action.payload
     },
   },
 });

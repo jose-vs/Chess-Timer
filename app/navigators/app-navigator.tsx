@@ -1,18 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { HomeScreen, SettingsScreen, ThemeScreen, NewModeScreen } from "../screens";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
+import {
+  HomeScreen,
+  SettingsScreen,
+  ThemeScreen,
+  NewModeScreen,
+} from "../screens";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeState } from "../models/app-slice/themeSlice";
+import { RootState } from "../models/root-stores/root-store";
+import { useSelector } from "react-redux";
 
 export type StackNavigatorParamList = {
   home: undefined;
   settings: undefined;
   theme: undefined;
-  mode: undefined
+  mode: undefined;
 };
 
 const Stack = createStackNavigator<StackNavigatorParamList>();
 
 const AppStack = () => {
+
+  const theme = useSelector((state: RootState) => state.theme);
+
+
+  const screenHeaderStyles: StackNavigationOptions = {
+    headerShown: true,
+    headerTitle: "",
+    headerStyle: {
+      backgroundColor:theme.header.backgroundColour,
+    },
+    headerTintColor: theme.header.secondaryColour,
+    headerTitleStyle: {
+      fontWeight: "bold",
+    },
+  };
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -30,29 +58,17 @@ const AppStack = () => {
       <Stack.Screen
         name="settings"
         component={SettingsScreen}
-        options={{
-          headerShown: true,
-          headerTitle: "",
-          headerBackTitleVisible: true,
-        }}
+        options={screenHeaderStyles}
       />
       <Stack.Screen
         name="mode"
         component={NewModeScreen}
-        options={{
-          headerShown: true,
-          headerTitle: "",
-          headerBackTitleVisible: true,
-        }}
+        options={screenHeaderStyles}
       />
       <Stack.Screen
         name="theme"
         component={ThemeScreen}
-        options={{
-          headerShown: true,
-          headerTitle: "",
-          headerBackTitleVisible: true,
-        }}
+        options={screenHeaderStyles}
       />
     </Stack.Navigator>
   );
@@ -64,16 +80,13 @@ const AppStack = () => {
 
 // const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
-
-// const SettingsTab = () => { 
+// const SettingsTab = () => {
 //   return (
 //     <Tab.Navigator>
 //       <Tab.Screen name="mode" component={NewModeScreen}/>
 //     </Tab.Navigator>
 //   )
 // }
-
-
 
 export const AppNavigator = () => {
   return (
