@@ -10,8 +10,6 @@ import {
   ThemeScreen,
   NewModeScreen,
 } from "../screens";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ThemeState } from "../models/app-slice/themeSlice";
 import { RootState } from "../models/root-stores/root-store";
 import { useSelector } from "react-redux";
 
@@ -27,7 +25,6 @@ const Stack = createStackNavigator<StackNavigatorParamList>();
 const AppStack = () => {
 
   const theme = useSelector((state: RootState) => state.theme);
-
 
   const screenHeaderStyles: StackNavigationOptions = {
     headerShown: true,
@@ -73,20 +70,6 @@ const AppStack = () => {
     </Stack.Navigator>
   );
 };
-
-// export type TabNavigatorParamList = {
-//   mode: undefined;
-// };
-
-// const Tab = createBottomTabNavigator<TabNavigatorParamList>();
-
-// const SettingsTab = () => {
-//   return (
-//     <Tab.Navigator>
-//       <Tab.Screen name="mode" component={NewModeScreen}/>
-//     </Tab.Navigator>
-//   )
-// }
 
 export const AppNavigator = () => {
   return (

@@ -24,6 +24,8 @@ import { useNavigation } from "@react-navigation/native";
 
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
+import { RootState } from "../../models/root-stores/root-store";
 
 /**
  *
@@ -34,6 +36,7 @@ export type NewModeScreenProps = StackNavigationProp<
 >;
 
 export const NewModeScreen: React.FC = (props: any) => {
+  const theme = useSelector((state: RootState) => state.theme);
   const navigation = useNavigation<NewModeScreenProps>();
 
   useEffect(() => {
@@ -48,7 +51,6 @@ export const NewModeScreen: React.FC = (props: any) => {
             const json_mode: ITimerInterface = JSON.parse(updateMode);
 
             setName(json_mode.name);
-            setKey(json_mode.key);
             setNamePlaceholder(json_mode.name);
             setIncrement(json_mode.increment.toString());
 
@@ -91,7 +93,6 @@ export const NewModeScreen: React.FC = (props: any) => {
    */
   const [namePlaceholder, setNamePlaceholder] = useState<string>("Name");
   const [name, setName] = useState<string>();
-  const [key, setKey] = useState<string>();
   const [increment, setIncrement] = useState<string>("0");
   const [time, setTime] = useState<string>("00:10:00");
 
@@ -266,11 +267,11 @@ export const NewModeScreen: React.FC = (props: any) => {
   };
 
   return (
-    <ScrollView w="100%">
+    <ScrollView backgroundColor={"warmGray.200"}>
       <Stack
         space={2.5}
         alignSelf="center"
-        px="4"
+        px={4}
         safeArea
         w={{
           base: "100%",
@@ -304,12 +305,15 @@ export const NewModeScreen: React.FC = (props: any) => {
             }}
             options={scrollIncrementData}
           />
-          <Text bold fontSize="xl" mb="4">
+          <Text bold fontSize="xl" mb="4" color={"warmGray.800"}>
             Create New Mode
           </Text>
           <FormControl isInvalid={nameEmpty || nameExists} mb="5">
-            <FormControl.Label>Mode Name</FormControl.Label>
+            <FormControl.Label color={theme.subtitle}>
+              Mode Name
+            </FormControl.Label>
             <Input
+              color={"warmGray.800"}
               placeholder={namePlaceholder}
               onChangeText={(text) => {
                 setName(text);
@@ -321,20 +325,43 @@ export const NewModeScreen: React.FC = (props: any) => {
           <FormControl mb="5">
             <FormControl.Label>Increment</FormControl.Label>
             <Input
+              color={"warmGray.800"}
               placeholder={increment}
               onPressIn={() => setIncrementPickMode(true)}
-              value={increment}
             />
           </FormControl>
           <FormControl mb="5">
             <FormControl.Label>Timer</FormControl.Label>
-            <Pressable m={10} onPress={() => setTimePickMode(true)}>
-              <Box>{time}</Box>
+            <Pressable m={2} onPress={() => setTimePickMode(true)}>
+              <Box
+                style={{
+                  backgroundColor: theme.backgroundColour,
+                  padding: 30,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  textAlign={"center"}
+                  style={{
+                    color: theme.title,
+                    fontSize: 22,
+                  }}
+                >
+                  {time}
+                </Text>
+              </Box>
             </Pressable>
           </FormControl>
-          <Divider />
         </Box>
-        <Button onPress={handleOnPress}>Submit</Button>
+        <Button
+          bg={theme.button.primary}
+          _pressed={{
+            bg: theme.button.pressed,
+          }}
+          onPress={handleOnPress}
+        >
+          Submit
+        </Button>
       </Stack>
     </ScrollView>
   );

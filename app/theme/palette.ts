@@ -29,9 +29,9 @@ export const AppPallette = {
       text: "#fff",
     },
     backgroundColour: "#2f3236",
-    secondaryColour: "",
-    title: "",
-    subtitle: "",
+    secondaryColour: "#fff",
+    title: "#fff",
+    subtitle: "#fff",
     text: "",
   } as ThemeState
 

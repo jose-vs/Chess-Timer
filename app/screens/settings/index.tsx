@@ -199,17 +199,16 @@ export const SettingsScreen: React.FC = () => {
    */
   const renderModeItem = (mode: ITimerInterface): JSX.Element => {
     return (
-      <Box
-        key={mode.key}
- 
-      >
+      <Box key={mode.key}>
         <Pressable
           onPress={() => onPress(mode)}
           onLongPress={() => onLongPress(mode)}
           style={[mode.selected ? style.selected : style.normal]}
         >
           <HStack justifyContent={"space-between"}>
-            <Text m={3} color={theme.list.text}>{mode.name}</Text>
+            <Text m={3} color={theme.list.text}>
+              {mode.name}
+            </Text>
             {selectionMode ? (
               <IconButton
                 size={"md"}
@@ -251,7 +250,6 @@ export const SettingsScreen: React.FC = () => {
           />
         </HStack>
       </HStack>
-
       <ScrollView>
         {modes.map((mode) => {
           return renderModeItem(mode);
@@ -260,5 +258,3 @@ export const SettingsScreen: React.FC = () => {
     </Box>
   );
 };
-
-
