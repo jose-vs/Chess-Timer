@@ -1,13 +1,11 @@
-import { Button, Box, HStack } from "native-base";
+import { Button, Box } from "native-base";
 import React from "react";
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from "../../../utils";
 import { ThemeState } from "../../../models/app-slice/themeSlice";
+import { Appearance } from "react-native";
 
 interface SampleProps {
-  theme: ThemeState
+  theme: ThemeState;
 }
-
-
 
 export const Sample = ({ theme }: SampleProps) => {
   return (
@@ -18,20 +16,19 @@ export const Sample = ({ theme }: SampleProps) => {
       h={72}
       w={40}
       rounded="lg"
-      borderTopColor={theme.timer.active.backgroundColour}
+      borderTopColor={theme.active}
       borderTopWidth={"150"}
-      borderBottomColor={theme.timer.inactive.backgroundColour}
+      borderBottomColor={theme.inactive}
       borderBottomWidth={"150"}
       shadow={3}
     >
       <Button
         h={8}
         w={8}
-        onPress={() => { 
-          console.log("[HEIGHT]: ", WINDOW_HEIGHT)
-          console.log("[WIDTH]: ", WINDOW_WIDTH)
+        onPress={() => {
+          console.log(Appearance.getColorScheme());
         }}
-        bg={theme.button.primary}
+        bg={theme.button}
         borderRadius={"full"}
         shadow={3}
       />

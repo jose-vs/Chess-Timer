@@ -178,11 +178,11 @@ export const HomeScreen: React.FC = () => {
   };
 
   return (
-    <Center backgroundColor={theme.timer.backgroundColour} px={4} flex={1}>
+    <Center backgroundColor={theme.inactive} px={4} flex={1}>
       {/* TIMER */}
       <VStack alignItems="center">
-        <Timer timer={timer.top} styles={theme.timer} handlePress={onTimerPress} />
-        <Timer timer={timer.bot} styles={theme.timer} handlePress={onTimerPress} />
+        <Timer timer={timer.top} styles={theme} handlePress={onTimerPress} />
+        <Timer timer={timer.bot} styles={theme} handlePress={onTimerPress} />
       </VStack>
 
       {/* MENU */}

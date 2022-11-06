@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -10,8 +10,8 @@ import {
   ThemeScreen,
   NewModeScreen,
 } from "../screens";
-import { RootState } from "../models/root-stores/root-store";
-import { useSelector } from "react-redux";
+import { Appearance } from "react-native";
+import { darkMode, lightMode } from "../theme";
 
 export type StackNavigatorParamList = {
   home: undefined;
@@ -23,16 +23,19 @@ export type StackNavigatorParamList = {
 const Stack = createStackNavigator<StackNavigatorParamList>();
 
 const AppStack = () => {
-
-  const theme = useSelector((state: RootState) => state.theme);
+  const isDarkMode: boolean = Appearance.getColorScheme() === "dark";
 
   const screenHeaderStyles: StackNavigationOptions = {
     headerShown: true,
     headerTitle: "",
     headerStyle: {
-      backgroundColor:theme.header.backgroundColour,
+      backgroundColor: isDarkMode
+        ? darkMode.header.background
+        : lightMode.header.background,
     },
-    headerTintColor: theme.header.secondaryColour,
+    headerTintColor: isDarkMode
+      ? darkMode.header.secondary
+      : lightMode.header.secondary,
     headerTitleStyle: {
       fontWeight: "bold",
     },

@@ -1,26 +1,32 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Box, Center, HStack, VStack, Button, ScrollView } from "native-base";
+import {
+  Box,
+  Center,
+  HStack,
+  VStack,
+  Button,
+  ScrollView,
+  theme,
+} from "native-base";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../models/root-stores/root-store";
 import { StackNavigatorParamList } from "../../navigators";
 import { Sample, ThemeButton } from "./components";
-import { AppPallette } from "../../theme";
+import { AppPallette, darkMode, lightMode } from "../../theme";
 import { ThemeState, changeTheme } from "../../models/app-slice/themeSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ThemeScreenProps = StackNavigationProp<StackNavigatorParamList, "theme">;
 
 export const ThemeScreen: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation<ThemeScreenProps>();
 
   const [currentTheme, setCurrentTheme] = useState(
     useSelector((state: RootState) => state.theme)
   );
-
-  const dispatch = useDispatch();
-
-  const navigation = useNavigation<ThemeScreenProps>();
 
   const handleThemeOnPress = (theme: ThemeState) => {
     setCurrentTheme(theme);
@@ -45,7 +51,10 @@ export const ThemeScreen: React.FC = () => {
   };
 
   return (
-    <ScrollView backgroundColor={"warmGray.200"}>
+    <ScrollView
+      _light={{ bg: lightMode.background }}
+      _dark={{ bg: darkMode.background }}
+    >
       <Center px={4} flex={1}>
         <VStack alignItems={"center"}>
           {/* SAMPLE */}
@@ -58,25 +67,25 @@ export const ThemeScreen: React.FC = () => {
                 changeTheme={handleThemeOnPress}
               />
               <ThemeButton
-                theme={AppPallette.default}
+                theme={AppPallette.theme2}
                 changeTheme={handleThemeOnPress}
               />
               <ThemeButton
-                theme={AppPallette.default}
+                theme={AppPallette.theme3}
                 changeTheme={handleThemeOnPress}
               />
             </HStack>
             <HStack space={"lg"} alignItems="center" m={3}>
               <ThemeButton
-                theme={AppPallette.default}
+                theme={AppPallette.theme4}
                 changeTheme={handleThemeOnPress}
               />
               <ThemeButton
-                theme={AppPallette.default}
+                theme={AppPallette.theme5}
                 changeTheme={handleThemeOnPress}
               />
               <ThemeButton
-                theme={AppPallette.default}
+                theme={AppPallette.theme6}
                 changeTheme={handleThemeOnPress}
               />
             </HStack>
@@ -86,7 +95,8 @@ export const ThemeScreen: React.FC = () => {
             paddingLeft={10}
             paddingRight={10}
             onPress={handleApplyOnPress}
-            backgroundColor={"#111517"}
+            _light={{ bg: lightMode.button.primary }}
+            _dark={{ bg: darkMode.button.primary }}
           >
             Apply
           </Button>

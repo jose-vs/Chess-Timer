@@ -3,18 +3,18 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { toMMSS, WINDOW_WIDTH } from "../../../utils";
 import { ITimer, TimerState } from "../../../models/timer";
-import { TimerStyles } from "../../../models/app-slice/themeSlice";
+import { ThemeState } from "../../../models/app-slice/themeSlice";
 
 interface TimerProps {
   timer: ITimer;
-  styles: TimerStyles
+  styles: ThemeState;
   handlePress: (timerKey: keyof TimerState) => void;
 }
 
 export const Timer = ({ timer, styles, handlePress }: TimerProps) => {
   return (
     <Pressable
-      bg={timer.isActive ? styles.active.backgroundColour : styles.inactive.backgroundColour}
+      bg={timer.isActive ? styles.active : styles.inactive}
       style={[
         {
           flex: 1,
@@ -37,7 +37,9 @@ export const Timer = ({ timer, styles, handlePress }: TimerProps) => {
             : {}
         }
       >
-        <Text fontSize={60} color={timer.isActive ? styles.active.text : styles.inactive.text}>{toMMSS(timer.time)}</Text>
+        <Text fontSize={60} color={styles.text}>
+          {toMMSS(timer.time)}
+        </Text>
       </Box>
     </Pressable>
   );

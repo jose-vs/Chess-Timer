@@ -6,7 +6,8 @@ import { store } from "./models/root-stores/root-store";
 import { Provider as StoreProvider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEFAULT_TIMER_MODES } from "./models/timer";
-import { AppPallette } from "./theme";
+import { AppPallette, darkMode, lightMode } from "./theme";
+import { Appearance } from "react-native";
 
 interface InitState {
   beenInit: boolean;
@@ -76,10 +77,7 @@ export default function App() {
       //   const parseInit: ThemeState = JSON.parse(theme);
       //   store.dispatch(changeTheme(parseInit));
       // } else {
-        await AsyncStorage.setItem(
-          "_theme",
-          JSON.stringify(AppPallette.default)
-        );
+      await AsyncStorage.setItem("_theme", JSON.stringify(AppPallette.default));
       // }
     } catch (e) {
       // saving error

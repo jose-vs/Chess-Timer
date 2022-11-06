@@ -26,6 +26,7 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import { RootState } from "../../models/root-stores/root-store";
+import { darkMode, lightMode } from "../../theme";
 
 /**
  *
@@ -36,7 +37,7 @@ export type NewModeScreenProps = StackNavigationProp<
 >;
 
 export const NewModeScreen: React.FC = (props: any) => {
-  const theme = useSelector((state: RootState) => state.theme);
+  const timerTheme = useSelector((state: RootState) => state.theme);
   const navigation = useNavigation<NewModeScreenProps>();
 
   useEffect(() => {
@@ -267,7 +268,10 @@ export const NewModeScreen: React.FC = (props: any) => {
   };
 
   return (
-    <ScrollView backgroundColor={"warmGray.200"}>
+    <ScrollView
+      _light={{ bg: lightMode.background }}
+      _dark={{ bg: darkMode.background }}
+    >
       <Stack
         space={2.5}
         alignSelf="center"
@@ -305,15 +309,16 @@ export const NewModeScreen: React.FC = (props: any) => {
             }}
             options={scrollIncrementData}
           />
-          <Text bold fontSize="xl" mb="4" color={"warmGray.800"}>
+          {/* <Text bold fontSize="xl" mb="4" color={"warmGray.800"}>
             Create New Mode
-          </Text>
+          </Text> */}
           <FormControl isInvalid={nameEmpty || nameExists} mb="5">
-            <FormControl.Label color={theme.subtitle}>
+            <FormControl.Label _text={{ color: "amber.200" }}>
               Mode Name
             </FormControl.Label>
             <Input
-              color={"warmGray.800"}
+              _dark={{ bg: "yellow.800", color: "amber.200" }}
+              _light={{ bg: "white" }}
               placeholder={namePlaceholder}
               onChangeText={(text) => {
                 setName(text);
@@ -323,19 +328,22 @@ export const NewModeScreen: React.FC = (props: any) => {
             <NameErrorMessage />
           </FormControl>
           <FormControl mb="5">
-            <FormControl.Label>Increment</FormControl.Label>
+            <FormControl.Label _text={{ color: "amber.200" }}>
+              Increment
+            </FormControl.Label>
             <Input
-              color={"warmGray.800"}
               placeholder={increment}
               onPressIn={() => setIncrementPickMode(true)}
             />
           </FormControl>
           <FormControl mb="5">
-            <FormControl.Label>Timer</FormControl.Label>
+            <FormControl.Label _text={{ color: "amber.200" }}>
+              Timer
+            </FormControl.Label>
             <Pressable m={2} onPress={() => setTimePickMode(true)}>
               <Box
                 style={{
-                  backgroundColor: theme.backgroundColour,
+                  backgroundColor: timerTheme.active,
                   padding: 30,
                   borderRadius: 10,
                 }}
@@ -343,7 +351,7 @@ export const NewModeScreen: React.FC = (props: any) => {
                 <Text
                   textAlign={"center"}
                   style={{
-                    color: theme.title,
+                    color: timerTheme.text,
                     fontSize: 22,
                   }}
                 >
@@ -354,9 +362,17 @@ export const NewModeScreen: React.FC = (props: any) => {
           </FormControl>
         </Box>
         <Button
-          bg={theme.button.primary}
-          _pressed={{
-            bg: theme.button.pressed,
+          _light={{
+            bg: lightMode.button.primary,
+            _pressed: {
+              bg: lightMode.button.pressed,
+            },
+          }}
+          _dark={{
+            bg: darkMode.button.primary,
+            _pressed: {
+              bg: darkMode.button.pressed,
+            },
           }}
           onPress={handleOnPress}
         >

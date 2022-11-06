@@ -6,8 +6,8 @@ import { RootState } from "../../models/root-stores/root-store";
 interface ButtonProps {
   name: string;
   icon: any;
-  isRound?: boolean
-  onPress: () => void
+  isRound?: boolean;
+  onPress: () => void;
 }
 
 export const Button = (props: ButtonProps) => {
@@ -19,12 +19,12 @@ export const Button = (props: ButtonProps) => {
       size={"lg"}
       variant="solid"
       borderRadius={isRound ? "full" : "lg"}
-      bg={theme.button.primary}
+      bg={theme.button}
       _pressed={{
-        bg: theme.button.pressed, 
+        bg: theme.buttonPressed,
       }}
       _icon={{
-        color: theme.button.secondary,
+        color: theme.buttonSecondary,
         as: icon,
         name: name,
       }}
