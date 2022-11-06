@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from "react";
 import { HStack, Center, VStack } from "native-base";
 import { Button } from "../../components";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import type { RootState } from "../../models/root-stores/root-store";
 import { useDispatch, useSelector } from "react-redux";
 import { Timer } from "./components/Timer";
@@ -21,6 +21,8 @@ export const HomeScreen: React.FC = () => {
    */
   const dispatch = useDispatch();
   const navigation = useNavigation<HomeScreenProps>();
+  const isFocused = useIsFocused();
+
 
   //
   const theme = useSelector((state: RootState) => state.theme);
@@ -40,7 +42,6 @@ export const HomeScreen: React.FC = () => {
   };
 
   //
-  const [isLoaded, setLoaded] = useState<boolean>(false);
   const [timerID, setTimerID] = useState<NodeJS.Timeout>();
   const [timer, setTimer] = useState<TimerState>(initialState);
 
@@ -49,11 +50,14 @@ export const HomeScreen: React.FC = () => {
    */
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
+      console.log("[GAME LOADED]: ", initialState)
+
+      console.log(timerInterface.startTime)
       setTimer(initialState);
       clearInterval(timerID);
     });
     return unsubscribe;
-  }, [navigation, timerInterface]);
+  }, [navigation, timerInterface, isFocused]);
 
   /**
    *

@@ -16,7 +16,11 @@ export const modeSlice = createSlice({
   initialState,
   reducers: {
     changeMode: (state, action: PayloadAction<ITimerInterface>) => {
-      state = action.payload;
+      state.name = action.payload.name;
+      state.key = action.payload.key
+      state.status = "ready";
+      state.increment = action.payload.increment;
+      state.startTime = action.payload.startTime;
     },
     changeStatus: (state, action: PayloadAction<TimerStatus>) => {
       state.status = action.payload;

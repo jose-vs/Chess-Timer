@@ -151,6 +151,7 @@ export const SettingsScreen: React.FC = () => {
    * @param mode
    */
   const pressItem = (mode: ITimerInterface): void => {
+    console.log("[MODE CHANGED]: ", mode)
     dispatch(changeMode(mode));
     navigation.navigate("home");
   };
