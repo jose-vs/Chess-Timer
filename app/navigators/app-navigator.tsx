@@ -10,8 +10,9 @@ import {
   ThemeScreen,
   NewModeScreen,
 } from "../screens";
-import { Appearance } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { darkMode, lightMode } from "../theme";
+import { IconButton, Pressable, useColorMode } from "native-base";
 
 export type StackNavigatorParamList = {
   home: undefined;
@@ -23,7 +24,8 @@ export type StackNavigatorParamList = {
 const Stack = createStackNavigator<StackNavigatorParamList>();
 
 const AppStack = () => {
-  const isDarkMode: boolean = Appearance.getColorScheme() === "dark";
+  const { colorMode, toggleColorMode } = useColorMode();
+  const isDarkMode: boolean = colorMode === "dark";
 
   const screenHeaderStyles: StackNavigationOptions = {
     headerShown: true,
@@ -36,9 +38,34 @@ const AppStack = () => {
     headerTintColor: isDarkMode
       ? darkMode.header.secondary
       : lightMode.header.secondary,
-    headerTitleStyle: {
-      fontWeight: "bold",
-    },
+    headerRight: () =>
+      isDarkMode ? (
+        <IconButton
+          m={5}
+          size={"lg"}
+          variant="ghost"
+          _pressed={{ bg: "" }}
+          _icon={{
+            color: darkMode.button.secondary,
+            as: Ionicons,
+            name: "moon",
+          }}
+          onPress={toggleColorMode}
+        />
+      ) : (
+        <IconButton
+          m={5}
+          size={"lg"}
+          variant="ghost"
+          _pressed={{ bg: "" }}
+          _icon={{
+            color: lightMode.button.secondary,
+            as: Ionicons,
+            name: "sunny",
+          }}
+          onPress={toggleColorMode}
+        />
+      ),
   };
 
   return (

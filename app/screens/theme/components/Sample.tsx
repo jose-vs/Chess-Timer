@@ -1,13 +1,17 @@
-import { Button, Box } from "native-base";
+import { Button, Box, useColorMode } from "native-base";
 import React from "react";
 import { ThemeState } from "../../../models/app-slice/themeSlice";
-import { Appearance } from "react-native";
 
 interface SampleProps {
   theme: ThemeState;
 }
 
 export const Sample = ({ theme }: SampleProps) => {
+
+  const {
+    colorMode,
+    toggleColorMode
+  } = useColorMode();
   return (
     <Box
       justifyContent={"center"}
@@ -26,7 +30,8 @@ export const Sample = ({ theme }: SampleProps) => {
         h={8}
         w={8}
         onPress={() => {
-          console.log(Appearance.getColorScheme());
+          console.log(colorMode);
+          toggleColorMode()
         }}
         bg={theme.button}
         borderRadius={"full"}
