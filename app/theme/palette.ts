@@ -2,9 +2,9 @@ import { ThemeState } from "../models/app-slice/themeSlice";
 
 export const AppPallette = {
   default: {
-    active: "#06090a",
-    inactive: "#34343b",
-    button: "#111517",
+    active:"#111517",
+    inactive: "#2f3236",
+    button: "#06090a",
     buttonSecondary: "#dcdcde",
     buttonPressed: "#1b1b1f",
     text: "#dcdcde",
@@ -49,25 +49,6 @@ export const AppPallette = {
     buttonPressed: "#1b1b1f",
     text: "#dcdcde",
   } as ThemeState,
-    // button: {
-    //   primary: "#111517",
-    //   secondary: "#dcdcde",
-    //   pressed: "#1b1b1f",
-    // },
-    // header: {
-    //   backgroundColour: "#111517",
-    //   secondaryColour: "#fff",
-    // },
-    // list: {
-    //   backgroundcolor: "#202224",
-    //   selected: "#3b4680",
-    //   text: "#fff",
-    // },
-    // backgroundColour: "#2f3236",
-    // secondaryColour: "#fff",
-    // title: "#fff",
-    // subtitle: "#fff",
-    // text: "",
   
 };
 
@@ -118,22 +99,22 @@ export const darkMode: SettingsThemeState = {
 
 export const lightMode: SettingsThemeState = {
   button: {
-    primary: "#111517",
-    secondary: "#dcdcde",
-    pressed: "#1b1b1f",
+    primary: "#b0bec5",
+    secondary: "#263238",
+    pressed: "#cfd8dc",
   },
   header: {
-    background: "#111517",
-    secondary: "#fff",
+    background: "#90a4ae",
+    secondary: "#222",
   },
   list: {
-    background: "#202224",
-    selected: "#3b4680",
-    text: "#fff",
+    background: "#cfd8dc",
+    selected: "#90a4ae",
+    text: "#222",
   },
-  background: "#2f3236",
+  background: "#eceff1",
   secondary: "#fff",
-  title: "#fff",
-  subtitle: "#fff",
-  text: "#fff",
+  title: "#222",
+  subtitle: "#222",
+  text: "#263238",
 };

@@ -95,8 +95,8 @@ export const ThemeScreen: React.FC = () => {
             paddingLeft={10}
             paddingRight={10}
             onPress={handleApplyOnPress}
-            _light={{ bg: lightMode.button.primary }}
-            _dark={{ bg: darkMode.button.primary }}
+            _light={{ bg: lightMode.button.primary, _text: {color: lightMode.text} }}
+            _dark={{ bg: darkMode.button.primary, _text: {color: darkMode.text} }}
           >
             Apply
           </Button>

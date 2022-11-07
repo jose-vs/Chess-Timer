@@ -309,16 +309,9 @@ export const NewModeScreen: React.FC = (props: any) => {
             }}
             options={scrollIncrementData}
           />
-          {/* <Text bold fontSize="xl" mb="4" color={"warmGray.800"}>
-            Create New Mode
-          </Text> */}
           <FormControl isInvalid={nameEmpty || nameExists} mb="5">
-            <FormControl.Label _text={{ color: "amber.200" }}>
-              Mode Name
-            </FormControl.Label>
+            <FormControl.Label>Mode Name</FormControl.Label>
             <Input
-              _dark={{ bg: "yellow.800", color: "amber.200" }}
-              _light={{ bg: "white" }}
               placeholder={namePlaceholder}
               onChangeText={(text) => {
                 setName(text);
@@ -328,18 +321,14 @@ export const NewModeScreen: React.FC = (props: any) => {
             <NameErrorMessage />
           </FormControl>
           <FormControl mb="5">
-            <FormControl.Label _text={{ color: "amber.200" }}>
-              Increment
-            </FormControl.Label>
+            <FormControl.Label>Increment</FormControl.Label>
             <Input
               placeholder={increment}
               onPressIn={() => setIncrementPickMode(true)}
             />
           </FormControl>
           <FormControl mb="5">
-            <FormControl.Label _text={{ color: "amber.200" }}>
-              Timer
-            </FormControl.Label>
+            <FormControl.Label>Timer</FormControl.Label>
             <Pressable m={2} onPress={() => setTimePickMode(true)}>
               <Box
                 style={{
@@ -367,12 +356,15 @@ export const NewModeScreen: React.FC = (props: any) => {
             _pressed: {
               bg: lightMode.button.pressed,
             },
+            _text: {color: lightMode.text}
+
           }}
           _dark={{
             bg: darkMode.button.primary,
             _pressed: {
               bg: darkMode.button.pressed,
             },
+            _text: {color: darkMode.text}
           }}
           onPress={handleOnPress}
         >

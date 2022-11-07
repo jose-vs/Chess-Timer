@@ -1,13 +1,20 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Box, HStack, Text, IconButton, ScrollView } from "native-base";
+import {
+  Box,
+  HStack,
+  Text,
+  IconButton,
+  ScrollView,
+  Pressable,
+} from "native-base";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { StackNavigatorParamList } from "../../navigators";
 import { Entypo, Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ITimerInterface } from "../../models/timer";
-import { Pressable, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { changeMode } from "../../models/app-slice/modeSlice";
 import { darkMode, lightMode } from "../../theme";
 import { Appearance } from "react-native";
@@ -185,9 +192,6 @@ export const SettingsScreen: React.FC = () => {
 
   const style = StyleSheet.create({
     selected: {
-      backgroundColor: isDarkMode
-        ? darkMode.list.selected
-        : darkMode.list.selected,
       padding: 10,
       margin: 5,
       paddingLeft: 18,
@@ -197,9 +201,6 @@ export const SettingsScreen: React.FC = () => {
       padding: 10,
       margin: 5,
       borderRadius: 5,
-      backgroundColor: isDarkMode
-        ? darkMode.list.background
-        : darkMode.list.background,
     },
   });
 
@@ -214,7 +215,17 @@ export const SettingsScreen: React.FC = () => {
         <Pressable
           onPress={() => onPress(mode)}
           onLongPress={() => onLongPress(mode)}
-          style={[mode.selected ? style.selected : style.normal]}
+          style={mode.selected ? style.selected : style.normal}
+          _light={
+            mode.selected
+              ? { backgroundColor: lightMode.list.selected }
+              : { backgroundColor: lightMode.list.background }
+          }
+          _dark={
+            mode.selected
+              ? { backgroundColor: darkMode.list.selected }
+              : { backgroundColor: darkMode.list.background }
+          }
         >
           <HStack justifyContent={"space-between"}>
             <Text
