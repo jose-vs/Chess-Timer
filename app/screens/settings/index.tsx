@@ -65,7 +65,12 @@ export const SettingsScreen: React.FC = () => {
             return Promise.all(
               modes_keys
                 .filter((key) => {
-                  if (key === "_init" || key === "_theme") return false;
+                  if (
+                    key === "_init" ||
+                    key === "_theme" ||
+                    key === "_colorMode"
+                  )
+                    return false;
                   else return true;
                 })
                 .map(async (key) => {
@@ -151,7 +156,7 @@ export const SettingsScreen: React.FC = () => {
    * @param mode
    */
   const pressItem = (mode: ITimerInterface): void => {
-    console.log("[MODE CHANGED]: ", mode)
+    console.log("[MODE CHANGED]: ", mode);
     dispatch(changeMode(mode));
     navigation.navigate("home");
   };

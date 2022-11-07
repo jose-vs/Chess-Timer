@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import "react-native-gesture-handler";
-import { NativeBaseProvider } from "native-base";
+import { NativeBaseProvider, ColorMode, StorageManager } from "native-base";
 import { AppNavigator } from "./navigators";
 import { store } from "./models/root-stores/root-store";
 import { Provider as StoreProvider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEFAULT_TIMER_MODES } from "./models/timer";
-import { AppPallette, darkMode, lightMode } from "./theme";
-import { Appearance } from "react-native";
+import { AppPallette } from "./theme";
 
 interface InitState {
   beenInit: boolean;
@@ -17,6 +16,24 @@ interface InitState {
 const initState: InitState = {
   beenInit: true,
   key: "_init",
+};
+
+const colorModeManager: StorageManager = {
+  get: async () => {
+    try {
+      let val = await AsyncStorage.getItem("_colorMode");
+      return val === "dark" ? "dark" : "light";
+    } catch (e) {
+      return "light";
+    }
+  },
+  set: async (value: ColorMode) => {
+    try {
+      await AsyncStorage.setItem("_colorMode", value as string);
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default function App() {
@@ -85,7 +102,7 @@ export default function App() {
   };
 
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider colorModeManager={colorModeManager}>
       <StoreProvider store={store}>
         <AppNavigator />
       </StoreProvider>
