@@ -37,7 +37,6 @@ export const NewModeScreen: React.FC = (props: any) => {
   const timerTheme = useSelector((state: RootState) => state.theme);
   const navigation = useNavigation<NewModeScreenProps>();
 
-
   /**
    *
    * @returns

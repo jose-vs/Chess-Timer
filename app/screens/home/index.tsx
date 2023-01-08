@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { HStack, Center, VStack } from "native-base";
 import { Button } from "../../components";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
@@ -22,7 +22,6 @@ export const HomeScreen: React.FC = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<HomeScreenProps>();
   const isFocused = useIsFocused();
-
 
   //
   const theme = useSelector((state: RootState) => state.theme);
@@ -51,9 +50,8 @@ export const HomeScreen: React.FC = () => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       console.log("[GAME LOADED]: ", initialState)
-
-      console.log(timerInterface.startTime)
       setTimer(initialState);
+      dispatch(changeStatus("ready"))
       clearInterval(timerID);
     });
     return unsubscribe;
