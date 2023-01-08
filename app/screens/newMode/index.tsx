@@ -1,19 +1,12 @@
 import {
   Box,
   Button,
-  Divider,
   FormControl,
   Input,
-  Pressable,
   ScrollView,
   Stack,
-  Text,
   WarningOutlineIcon,
 } from "native-base";
-import SegmentedPicker, {
-  PickerItem,
-  PickerOptions,
-} from "react-native-segmented-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { ITimerInterface } from "../../models/timer";
@@ -21,12 +14,16 @@ import { toMMSS, toSeconds } from "../../utils";
 import { StackNavigatorParamList } from "../../navigators";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import { RootState } from "../../models/root-stores/root-store";
 import { darkMode, lightMode } from "../../theme";
+import {
+  PickerItem,
+  TimePicker,
+  TimePickerOption,
+} from "./components/TimePicker";
 
 /**
  *
@@ -39,6 +36,89 @@ export type NewModeScreenProps = StackNavigationProp<
 export const NewModeScreen: React.FC = (props: any) => {
   const timerTheme = useSelector((state: RootState) => state.theme);
   const navigation = useNavigation<NewModeScreenProps>();
+
+
+  /**
+   *
+   * @returns
+   */
+  const isUpdate = (): boolean => {
+    return props.route.params !== undefined;
+  };
+
+  /**
+   *
+   */
+  const [nameExists, setNameExists] = useState<boolean>(false);
+  const [nameEmpty, setNameEmpty] = useState<boolean>(false);
+
+  /**
+   *
+   */
+  const [namePlaceholder, setNamePlaceholder] = useState<string>("Name");
+  const [name, setName] = useState<string>();
+  const [increment, setIncrement] = useState<string>("0");
+  const [hours, setHours] = useState<string>("00");
+  const [mins, setMins] = useState<string>("10");
+  const [seconds, setSeconds] = useState<string>("00");
+
+  const scrollTimerIncrementData: Array<TimePickerOption> = [
+    {
+      key: "increment",
+      currentValue: increment,
+      onChange: (item) => {
+        setIncrement(item);
+      },
+      items: [...Array(60).keys()].map((item, idx): PickerItem => {
+        return {
+          label: item.toString().slice(-2),
+          value: idx.toString().slice(-2),
+        };
+      }),
+    },
+  ];
+
+  const scrollTimerTimerData: Array<TimePickerOption> = [
+    {
+      key: "hours",
+      currentValue: hours,
+      onChange: (item) => {
+        setHours(item);
+      },
+      items: [...Array(60).keys()].map((item, idx): PickerItem => {
+        return {
+          label: ("0" + item.toString()).slice(-2),
+          value: ("0" + idx.toString()).slice(-2),
+        };
+      }),
+    },
+    {
+      key: "mins",
+      currentValue: mins,
+      onChange: (item) => {
+        setMins(item);
+      },
+      items: [...Array(60).keys()].map((item, idx): PickerItem => {
+        return {
+          label: ("0" + item.toString()).slice(-2),
+          value: ("0" + idx.toString()).slice(-2),
+        };
+      }),
+    },
+    {
+      key: "seconds",
+      currentValue: seconds,
+      onChange: (item) => {
+        setSeconds(item);
+      },
+      items: [...Array(60).keys()].map((item, idx): PickerItem => {
+        return {
+          label: ("0" + item.toString()).slice(-2),
+          value: ("0" + idx.toString()).slice(-2),
+        };
+      }),
+    },
+  ];
 
   useEffect(() => {
     const getItem = async () => {
@@ -58,7 +138,9 @@ export const NewModeScreen: React.FC = (props: any) => {
             let time = toMMSS(json_mode.startTime);
             if (time.length <= 5) time = "00:" + time;
 
-            setTime(time);
+            setHours(time.substring(0, 2));
+            setMins(time.substring(3, 5));
+            setSeconds(time.substring(6, 8));
           }
         } catch (e) {
           // read error
@@ -68,95 +150,6 @@ export const NewModeScreen: React.FC = (props: any) => {
 
     getItem();
   }, []);
-
-  /**
-   *
-   * @returns
-   */
-  const isUpdate = (): boolean => {
-    return props.route.params !== undefined;
-  };
-
-  /**
-   *
-   */
-  const [timePickMode, setTimePickMode] = useState<boolean>(false);
-  const [incrementPickMode, setIncrementPickMode] = useState<boolean>(false);
-
-  /**
-   *
-   */
-  const [nameExists, setNameExists] = useState<boolean>(false);
-  const [nameEmpty, setNameEmpty] = useState<boolean>(false);
-
-  /**
-   *
-   */
-  const [namePlaceholder, setNamePlaceholder] = useState<string>("Name");
-  const [name, setName] = useState<string>();
-  const [increment, setIncrement] = useState<string>("0");
-  const [time, setTime] = useState<string>("00:10:00");
-
-  /**
-   *
-   */
-  const scrollTimerData: PickerOptions = [
-    {
-      key: "spacer1",
-      items: [{ label: " ", value: " " }],
-    },
-    {
-      key: "hour",
-      items: [...Array(60).keys()].map((item, idx): PickerItem => {
-        return {
-          label: ("0" + item.toString()).slice(-2),
-          value: ("0" + idx.toString()).slice(-2),
-        };
-      }),
-    },
-    {
-      key: "divider1",
-      items: [{ label: ":", value: ":" }],
-    },
-    {
-      key: "minute",
-      items: [...Array(60).keys()].map((item, idx): PickerItem => {
-        return {
-          label: ("0" + item.toString()).slice(-2),
-          value: ("0" + idx.toString()).slice(-2),
-        };
-      }),
-    },
-    {
-      key: "divider2",
-      items: [{ label: ":", value: ":" }],
-    },
-    {
-      key: "second",
-      items: [...Array(60).keys()].map((item, idx): PickerItem => {
-        return {
-          label: ("0" + item.toString()).slice(-2),
-          value: ("0" + idx.toString()).slice(-2),
-        };
-      }),
-    },
-    {
-      key: "spacer2",
-      items: [{ label: " ", value: " " }],
-    },
-  ];
-
-  /**
-   *
-   */
-  const scrollIncrementData: PickerOptions = [
-    {
-      key: "increment",
-      items: [...Array(60).keys()].map((item, idx): PickerItem => {
-        return { label: item.toString(), value: idx.toString() };
-      }),
-    },
-  ];
 
   /**
    *
@@ -170,7 +163,7 @@ export const NewModeScreen: React.FC = (props: any) => {
         key: props.route.params ? props.route.params : uuidv4(),
         status: "ready",
         increment: increment ? parseInt(increment) : 0,
-        startTime: toSeconds(time),
+        startTime: toSeconds(hours + ":" + mins + ":" + seconds),
         selected: false,
       };
 
@@ -283,32 +276,6 @@ export const NewModeScreen: React.FC = (props: any) => {
         }}
       >
         <Box>
-          {/*  */}
-          <SegmentedPicker
-            ref={React.createRef()}
-            visible={timePickMode}
-            onConfirm={(selections) => {
-              setTime(
-                selections.hour +
-                  ":" +
-                  selections.minute +
-                  ":" +
-                  selections.second
-              );
-              setTimePickMode(false);
-            }}
-            options={scrollTimerData}
-          />
-          {/*  */}
-          <SegmentedPicker
-            ref={React.createRef()}
-            visible={incrementPickMode}
-            onConfirm={(selections) => {
-              setIncrement(selections.increment);
-              setIncrementPickMode(false);
-            }}
-            options={scrollIncrementData}
-          />
           <FormControl isInvalid={nameEmpty || nameExists} mb="5">
             <FormControl.Label>Mode Name</FormControl.Label>
             <Input
@@ -322,32 +289,11 @@ export const NewModeScreen: React.FC = (props: any) => {
           </FormControl>
           <FormControl mb="5">
             <FormControl.Label>Increment</FormControl.Label>
-            <Input
-              placeholder={increment}
-              onPressIn={() => setIncrementPickMode(true)}
-            />
+            <TimePicker options={scrollTimerIncrementData}></TimePicker>
           </FormControl>
           <FormControl mb="5">
             <FormControl.Label>Timer</FormControl.Label>
-            <Pressable m={2} onPress={() => setTimePickMode(true)}>
-              <Box
-                style={{
-                  backgroundColor: timerTheme.active,
-                  padding: 30,
-                  borderRadius: 10,
-                }}
-              >
-                <Text
-                  textAlign={"center"}
-                  style={{
-                    color: timerTheme.text,
-                    fontSize: 22,
-                  }}
-                >
-                  {time}
-                </Text>
-              </Box>
-            </Pressable>
+            <TimePicker options={scrollTimerTimerData}></TimePicker>
           </FormControl>
         </Box>
         <Button
@@ -356,15 +302,14 @@ export const NewModeScreen: React.FC = (props: any) => {
             _pressed: {
               bg: lightMode.button.pressed,
             },
-            _text: {color: lightMode.text}
-
+            _text: { color: lightMode.text },
           }}
           _dark={{
             bg: darkMode.button.primary,
             _pressed: {
               bg: darkMode.button.pressed,
             },
-            _text: {color: darkMode.text}
+            _text: { color: darkMode.text },
           }}
           onPress={handleOnPress}
         >
