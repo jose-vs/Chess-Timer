@@ -1,6 +1,6 @@
 import React from "react";
 import { Picker } from "@react-native-picker/picker";
-import { Box, ScrollView} from "native-base";
+import { Box, useColorMode } from "native-base";
 import { WINDOW_WIDTH } from "../../../utils";
 
 export interface TimePickerProps {
@@ -10,8 +10,9 @@ export interface TimePickerProps {
 export interface TimePickerOption {
   key: string;
   items: Array<PickerItem>;
+  valueArray: Array<PickerItem>;
   currentValue: string;
-  onChange: (item: any) => void;
+  onChange: (item: any, idx: number) => void;
 }
 
 export interface PickerItem {
@@ -25,6 +26,10 @@ export interface PickerItem {
  * @returns
  */
 export const TimePicker = ({ options }: TimePickerProps) => {
+
+  const { colorMode, toggleColorMode } = useColorMode();
+  const isDarkMode: boolean = colorMode === "dark";
+
   const renderSeparators = (idx: number) => {
     if (options.length > 1 && idx + 1 < options.length) {
       return <Box fontSize={100}>:</Box>;
@@ -41,7 +46,7 @@ export const TimePicker = ({ options }: TimePickerProps) => {
     >
       {options.map((item, idx) => {
         return (
-          <ScrollView
+          <Box
             key={idx}
             style={{
               alignItems: "center",
@@ -57,9 +62,9 @@ export const TimePicker = ({ options }: TimePickerProps) => {
               style={{
                 width: WINDOW_WIDTH * 0.3,
               }}
-              itemStyle={{ color: "#fff" }}
+              itemStyle={isDarkMode ? { color: "#fff" } : {color: "#000"}}
             >
-              {item.items.map((item, idx) => {
+              {item.valueArray.map((item, idx) => {
                 return (
                   <Picker.Item
                     label={item.label}
@@ -70,7 +75,7 @@ export const TimePicker = ({ options }: TimePickerProps) => {
               })}
             </Picker>
             {renderSeparators(idx)}
-          </ScrollView>
+          </Box>
         );
       })}
     </Box>

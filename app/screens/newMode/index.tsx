@@ -61,63 +61,81 @@ export const NewModeScreen: React.FC = (props: any) => {
   const [mins, setMins] = useState<string>("10");
   const [seconds, setSeconds] = useState<string>("00");
 
+  const incrementItems = [...Array(10).keys()].map((item, idx): PickerItem => {
+    return {
+      label: item.toString().slice(-2),
+      value: idx.toString().slice(-2),
+    };
+  });
+
+  const [incrementItemsArray, setIncrementItemsArray] =
+    useState(incrementItems);
+
   const scrollTimerIncrementData: Array<TimePickerOption> = [
     {
       key: "increment",
       currentValue: increment,
-      onChange: (item) => {
+      valueArray: incrementItemsArray,
+      onChange: (item, idx) => {
         setIncrement(item);
+        if (idx === 0) {
+          setIncrementItemsArray([
+            ...incrementItemsArray.slice(-1),
+            ...incrementItemsArray.slice(0, -1),
+          ]);
+        } else if (idx === incrementItemsArray.length - 1) {
+          setIncrementItemsArray([
+            ...incrementItemsArray.slice(1),
+            ...incrementItemsArray.slice(0, 1),
+          ]);
+        }
       },
-      items: [...Array(60).keys()].map((item, idx): PickerItem => {
-        return {
-          label: item.toString().slice(-2),
-          value: idx.toString().slice(-2),
-        };
-      }),
+
+      items: incrementItems,
     },
   ];
 
-  const scrollTimerTimerData: Array<TimePickerOption> = [
-    {
-      key: "hours",
-      currentValue: hours,
-      onChange: (item) => {
-        setHours(item);
-      },
-      items: [...Array(60).keys()].map((item, idx): PickerItem => {
-        return {
-          label: ("0" + item.toString()).slice(-2),
-          value: ("0" + idx.toString()).slice(-2),
-        };
-      }),
-    },
-    {
-      key: "mins",
-      currentValue: mins,
-      onChange: (item) => {
-        setMins(item);
-      },
-      items: [...Array(60).keys()].map((item, idx): PickerItem => {
-        return {
-          label: ("0" + item.toString()).slice(-2),
-          value: ("0" + idx.toString()).slice(-2),
-        };
-      }),
-    },
-    {
-      key: "seconds",
-      currentValue: seconds,
-      onChange: (item) => {
-        setSeconds(item);
-      },
-      items: [...Array(60).keys()].map((item, idx): PickerItem => {
-        return {
-          label: ("0" + item.toString()).slice(-2),
-          value: ("0" + idx.toString()).slice(-2),
-        };
-      }),
-    },
-  ];
+  // const scrollTimerTimerData: Array<TimePickerOption> = [
+  //   {
+  //     key: "hours",
+  //     currentValue: hours,
+  //     onChange: (item) => {
+  //       setHours(item);
+  //     },
+  //     items: [...Array(60).keys()].map((item, idx): PickerItem => {
+  //       return {
+  //         label: ("0" + item.toString()).slice(-2),
+  //         value: ("0" + idx.toString()).slice(-2),
+  //       };
+  //     }),
+  //   },
+  //   {
+  //     key: "mins",
+  //     currentValue: mins,
+  //     onChange: (item) => {
+  //       setMins(item);
+  //     },
+  //     items: [...Array(60).keys()].map((item, idx): PickerItem => {
+  //       return {
+  //         label: ("0" + item.toString()).slice(-2),
+  //         value: ("0" + idx.toString()).slice(-2),
+  //       };
+  //     }),
+  //   },
+  //   {
+  //     key: "seconds",
+  //     currentValue: seconds,
+  //     onChange: (item) => {
+  //       setSeconds(item);
+  //     },
+  //     items: [...Array(60).keys()].map((item, idx): PickerItem => {
+  //       return {
+  //         label: ("0" + item.toString()).slice(-2),
+  //         value: ("0" + idx.toString()).slice(-2),
+  //       };
+  //     }),
+  //   },
+  // ];
 
   useEffect(() => {
     const getItem = async () => {
@@ -292,7 +310,7 @@ export const NewModeScreen: React.FC = (props: any) => {
           </FormControl>
           <FormControl mb="5">
             <FormControl.Label>Timer</FormControl.Label>
-            <TimePicker options={scrollTimerTimerData}></TimePicker>
+            {/* <TimePicker options={scrollTimerTimerData}></TimePicker> */}
           </FormControl>
         </Box>
         <Button
